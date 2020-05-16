@@ -74,6 +74,11 @@ void Game::render()
 
 void Game::handlePlayerActions(sf::Keyboard::Key key, bool isPressed)
 {
+    if (key == sf::Keyboard::Q) {
+        printf("q pressed");
+        mainWindow.close();
+    }
+
     if (key == sf::Keyboard::Up)
         isUpPressed = isPressed;
     else if (key == sf::Keyboard::Down)
@@ -86,6 +91,7 @@ void Game::handlePlayerActions(sf::Keyboard::Key key, bool isPressed)
 
 void Game::update(sf::Time elapsedTime)
 {
+    // handle player actions consequences there
     if (isUpPressed) {
         testText.setString("UP");
     } else if (isDownPressed) {
