@@ -20,8 +20,5 @@ class Game
 		bool isDownPressed = false;
 		bool isLeftPressed = false;
 		bool isRightPressed = false;
-
-		sf::Text testText;
-		sf::Font testFont;
 };
 

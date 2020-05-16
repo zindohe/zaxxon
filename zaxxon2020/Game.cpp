@@ -6,10 +6,6 @@ const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 Game::Game() : mainWindow(sf::VideoMode(840, 600), "SFML works!", sf::Style::Close)
              , shape(100.f){
     shape.setFillColor(sf::Color::Green);
-    if (!testFont.loadFromFile("Media/Sansation.ttf"))
-    {
-        printf("ERREUR : police non chargee");
-    }
 
     init();
 }
@@ -19,11 +15,7 @@ Game::~Game() {
 
 void Game::init()
 {
-    testText.setString("NO MOVE");
-    testText.setFont(testFont);
-    testText.setPosition(0.f, 0.f);
-    testText.setCharacterSize(24);
-    testText.setFillColor(sf::Color::Blue);
+
 }
 
 void Game::run() {
@@ -68,7 +60,7 @@ void Game::processEvents() {
 void Game::render() 
 {
     mainWindow.clear();
-    mainWindow.draw(testText);
+    // draw entities there
     mainWindow.display();
 }
 
@@ -92,10 +84,5 @@ void Game::handlePlayerActions(sf::Keyboard::Key key, bool isPressed)
 void Game::update(sf::Time elapsedTime)
 {
     // handle player actions consequences there
-    if (isUpPressed) {
-        testText.setString("UP");
-    } else if (isDownPressed) {
-        testText.setString("DOWN");
-    }
 }
 
