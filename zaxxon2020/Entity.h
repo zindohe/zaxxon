@@ -4,14 +4,16 @@ enum EntityType
 {
 	Player,
 	Sbire,
-	Laser_right
+	Laser_cyan_right,
+
+	None
 };
 
 class Entity
 {
 
 	public:
-		Entity() { };
+		Entity();
 		~Entity() { };
 		friend ostream& operator<<(ostream& os, const Entity& entity);
 	public:
