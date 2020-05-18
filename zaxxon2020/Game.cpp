@@ -3,6 +3,8 @@
 #include "EntityManager.h"
 #include "EntityFactory.h"
 
+const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
+
 Game::Game() : mainWindow(sf::VideoMode(1200, 800), "ZAXXON 2020 HD", sf::Style::Close)
 {
     EntityFactory::loadTextures();
@@ -12,20 +14,43 @@ Game::Game() : mainWindow(sf::VideoMode(1200, 800), "ZAXXON 2020 HD", sf::Style:
 Game::~Game() {
 }
 
+
 void Game::run() {
 
+    sf::Clock clock;
+    sf::Time timeSinceLastUpdate = sf::Time::Zero;
     while (mainWindow.isOpen())
     {
-        
-        
-        sf::Event event;
-        while (mainWindow.pollEvent(event))
+        sf::Time elapsedTime = clock.restart();
+        timeSinceLastUpdate += elapsedTime;
+        while (timeSinceLastUpdate > TimePerFrame)
         {
-            if (event.type == sf::Event::Closed)
-                mainWindow.close();
+            timeSinceLastUpdate -= TimePerFrame;
+
+            processEvents();
+            update(TimePerFrame);
         }
 
         render();
+    }
+}
+
+void Game::processEvents() {
+
+    sf::Event event;
+    while (mainWindow.pollEvent(event)) {
+        switch (event.type)
+        {
+        case sf::Event::KeyPressed:
+            handlePlayerActions(event.key.code, true);
+            break;
+        case sf::Event::KeyReleased:
+            handlePlayerActions(event.key.code, false);
+            break;
+        case sf::Event::Closed:
+            mainWindow.close();
+            break;
+        }
     }
 }
 
@@ -44,6 +69,28 @@ void Game::render() {
     }
 
     mainWindow.display();
+}
+
+void Game::handlePlayerActions(sf::Keyboard::Key key, bool isPressed)
+{
+    if (key == sf::Keyboard::Q) {
+        printf("q pressed");
+        mainWindow.close();
+    }
+
+    if (key == sf::Keyboard::Up)
+        isUpPressed = isPressed;
+    else if (key == sf::Keyboard::Down)
+        isDownPressed = isPressed;
+    else if (key == sf::Keyboard::Left)
+        isLeftPressed = isPressed;
+    else if (key == sf::Keyboard::Right)
+        isRightPressed = isPressed;
+}
+
+void Game::update(sf::Time elapsedTime)
+{
+    // handle player actions consequences there
 }
 
 void Game::initSprite() {
@@ -79,9 +126,9 @@ void Game::initSprite() {
 
 
 
-    // Ennemies Alpha
     shared_ptr<Entity> ennemyAlphaHorizontalLeft = EntityFactory::createEntity(EntityType::EnnemyAlphaHorizontalLeft,
                                                                                 sf::Vector2f(900.f, 0.f), true);
+    // Ennemies Alpha
     EntityManager::entities.push_back(ennemyAlphaHorizontalLeft);
 
     for (float y = ennemyAlphaHorizontalLeft->size.y + 20.f; y < 580; y += ennemyAlphaHorizontalLeft->size.y + 20.f)
@@ -100,11 +147,12 @@ void Game::initSprite() {
     {
         shared_ptr<Entity> ennemyBetaHorizontalLeft = EntityFactory::createEntity(EntityType::EnnemyBetaHorizontalLeft,
                                                                                     sf::Vector2f(900.f, y), true);
+   
         EntityManager::entities.push_back(ennemyBetaHorizontalLeft);
     }
 
-    //Ennemy Boss
     shared_ptr<Entity> ennemyBoss = EntityFactory::createEntity(EntityType::EnnemyBoss,
+    //Ennemy Boss
         sf::Vector2f(1000.f, 120.f), true);
     EntityManager::entities.push_back(ennemyBoss);
 }

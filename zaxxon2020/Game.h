@@ -10,10 +10,20 @@ class Game
 		void run();
 		
 	private:
-		sf::RenderWindow mainWindow; // Fenêtre Principale où l'on va poser des elements graphique
+		void processEvents();
+		void handlePlayerActions(sf::Keyboard::Key key, bool isPressed);
+		void update(sf::Time elapsedTime);
+
+		sf::RenderWindow mainWindow; // Fenï¿½tre Principale oï¿½ l'on va poser des elements graphique
 		
 		void render();
 		void initSprite();
 
+		sf::CircleShape shape;
+		static const sf::Time	TimePerFrame;
+		bool isUpPressed = false;
+		bool isDownPressed = false;
+		bool isLeftPressed = false;
+		bool isRightPressed = false;
 };
 
