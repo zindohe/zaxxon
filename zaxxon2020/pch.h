@@ -10,14 +10,13 @@
 #define PCH_H
 
 // TODO: add headers that you want to pre-compile here
-#include <stdio.h>
-#include <cstdlib>
-#include <tchar.h>
+#include <iostream>
 #include <string>
-#include <sstream>
 #include <memory>
 #include <vector>
 #include <algorithm>
+#include <map>
+
 
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
@@ -28,5 +27,7 @@
 #pragma comment(lib, "sfml-system-d.lib")
 #pragma comment(lib, "sfml-window-d.lib")
 #pragma comment(lib, "opengl32.lib")
+
+using namespace std;
 
 #endif //PCH_H
