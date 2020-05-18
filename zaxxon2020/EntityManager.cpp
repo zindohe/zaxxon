@@ -14,7 +14,7 @@ EntityManager::~EntityManager()
 }
 
 
-std::shared_ptr<Entity> EntityManager::GetPlayer()
+shared_ptr<Entity> EntityManager::GetPlayer()
 {
 	for (std::shared_ptr<Entity> entity : EntityManager::entities)
 	{

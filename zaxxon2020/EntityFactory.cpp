@@ -4,7 +4,7 @@
 map<EntityType, string> EntityFactory::textureFiles = { 
 												{EntityType::Background, "sprites/galaxy.jpg"},
 												{EntityType::Player, "sprites/vaisseau.png"},
-												{EntityType::LaserCyanHorizontal, "sprites/laser_cyan_horizontal.png"},
+												{EntityType::PlayerLaser, "sprites/laser_blue_horizontal.png"},
 												{EntityType::LaserBlueHorizontal, "sprites/laser_blue_horizontal.png"},
 												{EntityType::LaserRedHorizontal, "sprites/laser-red-horizontal.png"},
 												{EntityType::EnnemyAlphaHorizontalLeft, "sprites/ennemiy_alpha_horizontal_left.png"},

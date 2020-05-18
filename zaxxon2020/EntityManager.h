@@ -9,6 +9,6 @@ class EntityManager
 		
 	public : 
 		static vector<shared_ptr<Entity>> entities;
-		static std::shared_ptr<Entity> GetPlayer();
+		static shared_ptr<Entity> GetPlayer();
 };
 

@@ -2,16 +2,70 @@
 #include "Game.h"
 #include "EntityManager.h"
 #include "EntityFactory.h"
+#include "Action.h"
 
+const float Game::PlayerSpeed = 10.f;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
-Game::Game() : mainWindow(sf::VideoMode(1200, 800), "ZAXXON 2020 HD", sf::Style::Close)
+Game::Game() :  mainWindow(sf::VideoMode(1200, 800), "ZAXXON 2020 HD", sf::Style::Close),
+                isUpPressed(false),
+                isDownPressed(false),
+                isLeftPressed(false),
+                isRightPressed(false),
+                isSpacePressed(false)
 {
     EntityFactory::loadTextures();
-
     initSprite();
 }
+
 Game::~Game() {
+}
+
+void Game::initSprite() {
+
+    shared_ptr<Entity> background = EntityFactory::createEntity(EntityType::Background, sf::Vector2f(0.f, 0.f), true);
+
+    shared_ptr<Entity> player = EntityFactory::createEntity(EntityType::Player, sf::Vector2f(100.f, 100.f), true);
+
+
+    shared_ptr<Entity> delimiter = EntityFactory::createEntity(EntityType::Delimiter,
+        sf::Vector2f(600.f, 0.f), true);
+
+
+    EntityManager::entities.push_back(background);
+    EntityManager::entities.push_back(delimiter);
+
+    EntityManager::entities.push_back(player);
+
+    shared_ptr<Entity> ennemyAlphaHorizontalLeft = EntityFactory::createEntity(EntityType::EnnemyAlphaHorizontalLeft,
+        sf::Vector2f(900.f, 0.f), true);
+    // Ennemies Alpha
+    EntityManager::entities.push_back(ennemyAlphaHorizontalLeft);
+
+    for (float y = ennemyAlphaHorizontalLeft->size.y + 20.f; y < 580; y += ennemyAlphaHorizontalLeft->size.y + 20.f)
+    {
+        shared_ptr<Entity> ennemyAlphaHorizontalLeft = EntityFactory::createEntity(EntityType::EnnemyAlphaHorizontalLeft,
+            sf::Vector2f(800.f, y), true);
+        EntityManager::entities.push_back(ennemyAlphaHorizontalLeft);
+    }
+
+    //Ennemies Beta
+    shared_ptr<Entity> ennemyBetaHorizontalLeft = EntityFactory::createEntity(EntityType::EnnemyBetaHorizontalLeft,
+        sf::Vector2f(900.f, 0.f), true);
+    EntityManager::entities.push_back(ennemyBetaHorizontalLeft);
+
+    for (float y = ennemyBetaHorizontalLeft->size.y + 20.f; y < 580; y += ennemyBetaHorizontalLeft->size.y + 20.f)
+    {
+        shared_ptr<Entity> ennemyBetaHorizontalLeft = EntityFactory::createEntity(EntityType::EnnemyBetaHorizontalLeft,
+            sf::Vector2f(900.f, y), true);
+
+        EntityManager::entities.push_back(ennemyBetaHorizontalLeft);
+    }
+
+    shared_ptr<Entity> ennemyBoss = EntityFactory::createEntity(EntityType::EnnemyBoss,
+        //Ennemy Boss
+        sf::Vector2f(1000.f, 120.f), true);
+    EntityManager::entities.push_back(ennemyBoss);
 }
 
 
@@ -41,15 +95,15 @@ void Game::processEvents() {
     while (mainWindow.pollEvent(event)) {
         switch (event.type)
         {
-        case sf::Event::KeyPressed:
-            handlePlayerActions(event.key.code, true);
-            break;
-        case sf::Event::KeyReleased:
-            handlePlayerActions(event.key.code, false);
-            break;
-        case sf::Event::Closed:
-            mainWindow.close();
-            break;
+            case sf::Event::KeyPressed:
+                handlePlayerActions(event.key.code, true);
+                break;
+            case sf::Event::KeyReleased:
+                handlePlayerActions(event.key.code, false);
+                break;
+            case sf::Event::Closed:
+                mainWindow.close();
+                break;
         }
     }
 }
@@ -86,73 +140,30 @@ void Game::handlePlayerActions(sf::Keyboard::Key key, bool isPressed)
         isLeftPressed = isPressed;
     else if (key == sf::Keyboard::Right)
         isRightPressed = isPressed;
+    else if (key == sf::Keyboard::Space)
+        isSpacePressed = isPressed;
 }
 
 void Game::update(sf::Time elapsedTime)
 {
     // handle player actions consequences there
+    handlePlayerMove();
 }
 
-void Game::initSprite() {
+
+
+
+void Game::handlePlayerMove() {
+
+    if (isUpPressed)
+        Action::Execute(ActionType::PlayerUpMove);
+    if (isLeftPressed)
+        Action::Execute(ActionType::PlayerLeftMove);
+    if (isDownPressed)
+        Action::Execute(ActionType::PlayerDownMove);
+    if (isRightPressed)
+        Action::Execute(ActionType::PlayerRightMove);
+    if (isSpacePressed)
+        Action::Execute(ActionType::PlayerFireLaser);
     
-    shared_ptr<Entity> background = EntityFactory::createEntity(EntityType::Background, sf::Vector2f(0.f, 0.f), true);
-
-    shared_ptr<Entity> player = EntityFactory::createEntity(EntityType::Player, sf::Vector2f(100.f, 100.f), true);
-
-    shared_ptr<Entity> laserCyanHorizontal = EntityFactory::createEntity(EntityType::LaserCyanHorizontal,
-        sf::Vector2f(200.f, 60.f), true);
-
-    shared_ptr<Entity> laserBlueHorizontal = EntityFactory::createEntity(EntityType::LaserBlueHorizontal,
-        sf::Vector2f(200.f, 100.f), true);
-
-    shared_ptr<Entity> laserRedHorizontal = EntityFactory::createEntity(EntityType::LaserRedHorizontal,
-        sf::Vector2f(200.f, 140.f), true);
-
-
-
-
-    shared_ptr<Entity> delimiter = EntityFactory::createEntity(EntityType::Delimiter,
-        sf::Vector2f(600.f, 0.f), true);
-
-
-    EntityManager::entities.push_back(background);
-    EntityManager::entities.push_back(delimiter);
-
-    EntityManager::entities.push_back(player);
-
-    EntityManager::entities.push_back(laserCyanHorizontal);
-    EntityManager::entities.push_back(laserBlueHorizontal);
-    EntityManager::entities.push_back(laserRedHorizontal);
-
-
-
-    shared_ptr<Entity> ennemyAlphaHorizontalLeft = EntityFactory::createEntity(EntityType::EnnemyAlphaHorizontalLeft,
-                                                                                sf::Vector2f(900.f, 0.f), true);
-    // Ennemies Alpha
-    EntityManager::entities.push_back(ennemyAlphaHorizontalLeft);
-
-    for (float y = ennemyAlphaHorizontalLeft->size.y + 20.f; y < 580; y += ennemyAlphaHorizontalLeft->size.y + 20.f)
-    {
-        shared_ptr<Entity> ennemyAlphaHorizontalLeft = EntityFactory::createEntity(EntityType::EnnemyAlphaHorizontalLeft,
-                                                                                    sf::Vector2f(800.f, y), true);
-        EntityManager::entities.push_back(ennemyAlphaHorizontalLeft);
-    }
-
-    //Ennemies Beta
-    shared_ptr<Entity> ennemyBetaHorizontalLeft = EntityFactory::createEntity(EntityType::EnnemyBetaHorizontalLeft,
-                                                                                sf::Vector2f(900.f, 0.f), true);
-    EntityManager::entities.push_back(ennemyBetaHorizontalLeft);
-
-    for (float y = ennemyBetaHorizontalLeft->size.y + 20.f; y < 580; y += ennemyBetaHorizontalLeft->size.y + 20.f)
-    {
-        shared_ptr<Entity> ennemyBetaHorizontalLeft = EntityFactory::createEntity(EntityType::EnnemyBetaHorizontalLeft,
-                                                                                    sf::Vector2f(900.f, y), true);
-   
-        EntityManager::entities.push_back(ennemyBetaHorizontalLeft);
-    }
-
-    shared_ptr<Entity> ennemyBoss = EntityFactory::createEntity(EntityType::EnnemyBoss,
-    //Ennemy Boss
-        sf::Vector2f(1000.f, 120.f), true);
-    EntityManager::entities.push_back(ennemyBoss);
 }

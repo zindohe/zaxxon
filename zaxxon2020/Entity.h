@@ -5,7 +5,7 @@ enum EntityType
 	Background,
 	Player,
 	Sbire,
-	LaserCyanHorizontal,
+	PlayerLaser,
 	LaserBlueHorizontal,
 	LaserRedHorizontal,
 	EnnemyAlphaHorizontalLeft,
