@@ -62,8 +62,7 @@ void Game::initSprite() {
         sf::Vector2f(200.f, 140.f), true);
 
 
-    shared_ptr<Entity> ennemyBoss = EntityFactory::createEntity(EntityType::EnnemyBoss,
-        sf::Vector2f(1000.f, 120.f), true);
+
 
     shared_ptr<Entity> delimiter = EntityFactory::createEntity(EntityType::Delimiter,
         sf::Vector2f(600.f, 0.f), true);
@@ -73,33 +72,28 @@ void Game::initSprite() {
     EntityManager::entities.push_back(delimiter);
 
     EntityManager::entities.push_back(player);
-   
-    EntityManager::entities.push_back(ennemyBoss);
-
 
     EntityManager::entities.push_back(laserCyanHorizontal);
     EntityManager::entities.push_back(laserBlueHorizontal);
     EntityManager::entities.push_back(laserRedHorizontal);
 
-    shared_ptr<Entity> ennemyAlphaHorizontalLeft = EntityFactory::createEntity(EntityType::EnnemyAlphaHorizontalLeft,
-        sf::Vector2f(900.f, 0.f), true);
-    EntityManager::entities.push_back(ennemyAlphaHorizontalLeft);
 
-    //Ennemy Alpha
+
+    // Ennemies Alpha
+    shared_ptr<Entity> ennemyAlphaHorizontalLeft = EntityFactory::createEntity(EntityType::EnnemyAlphaHorizontalLeft,
+                                                                                sf::Vector2f(900.f, 0.f), true);
+    EntityManager::entities.push_back(ennemyAlphaHorizontalLeft);
 
     for (float y = ennemyAlphaHorizontalLeft->size.y + 20.f; y < 580; y += ennemyAlphaHorizontalLeft->size.y + 20.f)
     {
-        cout << "Y : " << y << "Largeur vaisseau : " << ennemyAlphaHorizontalLeft->size.y << endl;
         shared_ptr<Entity> ennemyAlphaHorizontalLeft = EntityFactory::createEntity(EntityType::EnnemyAlphaHorizontalLeft,
                                                                                     sf::Vector2f(800.f, y), true);
         EntityManager::entities.push_back(ennemyAlphaHorizontalLeft);
     }
 
-    //Ennemy Beta
-
+    //Ennemies Beta
     shared_ptr<Entity> ennemyBetaHorizontalLeft = EntityFactory::createEntity(EntityType::EnnemyBetaHorizontalLeft,
                                                                                 sf::Vector2f(900.f, 0.f), true);
-
     EntityManager::entities.push_back(ennemyBetaHorizontalLeft);
 
     for (float y = ennemyBetaHorizontalLeft->size.y + 20.f; y < 580; y += ennemyBetaHorizontalLeft->size.y + 20.f)
@@ -108,4 +102,9 @@ void Game::initSprite() {
                                                                                     sf::Vector2f(900.f, y), true);
         EntityManager::entities.push_back(ennemyBetaHorizontalLeft);
     }
+
+    //Ennemy Boss
+    shared_ptr<Entity> ennemyBoss = EntityFactory::createEntity(EntityType::EnnemyBoss,
+        sf::Vector2f(1000.f, 120.f), true);
+    EntityManager::entities.push_back(ennemyBoss);
 }
