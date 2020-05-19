@@ -13,13 +13,11 @@ enum ActionType
 class Action
 {
 	public:
-		static void Execute(ActionType type);
-	private:
 		static void PlayerFireLaser();
 		static void PlayerLeftMove();
-		static void PlayerRightMove();
+		static void PlayerRightMove(const float windowWidthSize);
 		static void PlayerUpMove();
-		static void PlayerDownMove();
+		static void PlayerDownMove(const float windowHeightSize);
 
 	private:
 		static const float PlayerSpeed;

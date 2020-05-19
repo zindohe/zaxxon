@@ -16,6 +16,8 @@ class Game
 		void render();
 		void initSprite();
 
+		void updateHandleManagement(sf::Time elapsedTime);
+
 		void processEvents();
 		void handlePlayerActions(sf::Keyboard::Key key, bool isPressed);
 		void update(sf::Time elapsedTime);
@@ -30,5 +32,7 @@ class Game
 		bool isLeftPressed;
 		bool isRightPressed;
 		bool isSpacePressed;
+
+		sf::Time updateTime;
 };
 

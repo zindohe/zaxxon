@@ -1,8 +1,10 @@
 #include "pch.h"
 #include "Game.h"
+
 #include "EntityManager.h"
 #include "EntityFactory.h"
 #include "Action.h"
+#include "HandleManager.h"
 
 const float Game::PlayerSpeed = 10.f;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
@@ -12,7 +14,8 @@ Game::Game() :  mainWindow(sf::VideoMode(1200, 800), "ZAXXON 2020 HD", sf::Style
                 isDownPressed(false),
                 isLeftPressed(false),
                 isRightPressed(false),
-                isSpacePressed(false)
+                isSpacePressed(false),
+                updateTime()
 {
     EntityFactory::loadTextures();
     initSprite();
@@ -84,7 +87,7 @@ void Game::run() {
             processEvents();
             update(TimePerFrame);
         }
-
+        updateHandleManagement(elapsedTime);
         render();
     }
 }
@@ -141,13 +144,23 @@ void Game::handlePlayerActions(sf::Keyboard::Key key, bool isPressed)
     else if (key == sf::Keyboard::Right)
         isRightPressed = isPressed;
     else if (key == sf::Keyboard::Space)
+    {
+        if ( isPressed == false || isSpacePressed == true)
+        {
+            isSpacePressed = false;
+            return;
+        }
         isSpacePressed = isPressed;
+        Action::PlayerFireLaser();
+    }
+        
 }
 
 void Game::update(sf::Time elapsedTime)
 {
     // handle player actions consequences there
     handlePlayerMove();
+        
 }
 
 
@@ -156,14 +169,23 @@ void Game::update(sf::Time elapsedTime)
 void Game::handlePlayerMove() {
 
     if (isUpPressed)
-        Action::Execute(ActionType::PlayerUpMove);
+        Action::PlayerUpMove();
     if (isLeftPressed)
-        Action::Execute(ActionType::PlayerLeftMove);
+        Action::PlayerLeftMove();
     if (isDownPressed)
-        Action::Execute(ActionType::PlayerDownMove);
+        Action::PlayerDownMove(mainWindow.getSize().y);
     if (isRightPressed)
-        Action::Execute(ActionType::PlayerRightMove);
-    if (isSpacePressed)
-        Action::Execute(ActionType::PlayerFireLaser);
-    
+        Action::PlayerRightMove(mainWindow.getSize().x);
+}
+
+
+void Game::updateHandleManagement(sf::Time elapsedTime)
+{
+    updateTime += elapsedTime;
+    if (updateTime >= sf::seconds(1.0f))
+    {
+        
+    }
+    HandleManager::HandlePlayerLaserMove(this->mainWindow.getSize().x);
+   
 }
