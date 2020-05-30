@@ -4,6 +4,7 @@
 #include "EntityFactory.h"
 
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
+const float Game::EnemiesSpeed = 100.f;
 
 Game::Game() : mainWindow(sf::VideoMode(1200, 800), "ZAXXON 2020 HD", sf::Style::Close)
 {
@@ -90,7 +91,71 @@ void Game::handlePlayerActions(sf::Keyboard::Key key, bool isPressed)
 
 void Game::update(sf::Time elapsedTime)
 {
-    // handle player actions consequences there
+    for (std::shared_ptr<Entity> entity : EntityManager::entities)
+    {
+        if (entity->enabled == false)
+        {
+            continue;
+        }
+        else if (entity->type == EntityType::EnnemyAlphaHorizontalLeft)
+        {
+            handleEnemiesMovement(&entity->sprite, elapsedTime, MovementType::VerticalBackAndForth);
+        }
+
+        // entity->sprite.move(movement * elapsedTime.asSeconds());
+    }
+}
+
+void Game::handleEnemiesMovement(sf::Sprite* sprite, sf::Time elapsedTime, MovementType movementType) {
+   switch (movementType)
+    {
+    case VerticalBackAndForth:
+        verticalBackAndForthMovement(sprite, elapsedTime);
+        break;
+    case HorizontalBackAndForth:
+        printf("handleEnemiesMovement() : HorizontalBackAndForth movement type not implemented !");
+        break;
+    case Circle:
+        printf("handleEnemiesMovement() : Circle movement type not implemented !");
+        break;
+    case Zigzag:
+        printf("handleEnemiesMovement() : Zigzag movement type not implemented !");
+        break;
+    default:
+        printf("handleEnemiesMovement() : No movement type type provided !");
+        break;
+    }
+}
+
+
+void Game::verticalBackAndForthMovement(sf::Sprite* sprite, sf::Time elapsedTime)
+{
+    sf::Vector2f movement(0.f, 0.f);
+
+    if (Game::verticalEnemyFramePos == 1000)
+        verticalEnemyFramePos = 0;
+
+    if (Game::verticalEnemyFramePos < 500) {
+        movement.y -= EnemiesSpeed;
+    }
+    else if (Game::verticalEnemyFramePos >= 500) {
+        movement.y += EnemiesSpeed;
+    }
+    Game::verticalEnemyFramePos += 1;
+
+    sprite->move(movement * elapsedTime.asSeconds());
+}
+
+void Game::horizontalBackAndForthMovement(sf::Sprite* sprite, sf::Time elapsedTime)
+{
+}
+
+void Game::circleMovement(sf::Sprite* sprite, sf::Time elapsedTime)
+{
+}
+
+void Game::zigzagMovement(sf::Sprite* sprite, sf::Time elapsedTime)
+{
 }
 
 void Game::initSprite() {
@@ -120,9 +185,9 @@ void Game::initSprite() {
 
     EntityManager::entities.push_back(player);
 
-    EntityManager::entities.push_back(laserCyanHorizontal);
+    /*EntityManager::entities.push_back(laserCyanHorizontal);
     EntityManager::entities.push_back(laserBlueHorizontal);
-    EntityManager::entities.push_back(laserRedHorizontal);
+    EntityManager::entities.push_back(laserRedHorizontal);*/
 
 
 

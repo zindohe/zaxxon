@@ -16,6 +16,14 @@ enum EntityType
 	None
 };
 
+enum MovementType
+{
+	VerticalBackAndForth,
+	HorizontalBackAndForth,
+	Circle,
+	Zigzag
+};
+
 class Entity
 {
 
