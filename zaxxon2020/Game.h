@@ -36,5 +36,6 @@ class Game
 		int verticalEnemyFramePos = 0;
 		int horizontalEnemyFramePos = 0;
 		float entities_angle = 90.f * PI / 180.f;
+		int horizontalMovesCounter = 0;
 };
 

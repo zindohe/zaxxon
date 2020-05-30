@@ -99,7 +99,7 @@ void Game::update(sf::Time elapsedTime)
         }
         else if (entity->type == EntityType::EnnemyAlphaHorizontalLeft)
         {
-            handleEnemiesMovement(&entity->sprite, elapsedTime, MovementType::VerticalBackAndForth, 1500);
+            handleEnemiesMovement(&entity->sprite, elapsedTime, MovementType::Zigzag, 1500);
         }
         else if (entity->type == EntityType::EnnemyBetaHorizontalLeft)
         {
@@ -128,7 +128,7 @@ void Game::handleEnemiesMovement(sf::Sprite* sprite, sf::Time elapsedTime, Movem
         circleMovement(sprite, elapsedTime, movementSize);
         break;
     case Zigzag:
-        printf("handleEnemiesMovement() : Zigzag movement type not implemented !");
+        zigzagMovement(sprite, elapsedTime, movementSize);
         break;
     default:
         printf("handleEnemiesMovement() : No movement type type provided !");
@@ -179,8 +179,15 @@ void Game::circleMovement(sf::Sprite* sprite, sf::Time elapsedTime, int circleSi
     sprite->move(sf::Vector2f(circleSize * cos(Game::entities_angle), circleSize * sin(Game::entities_angle)));
 }
 
-void Game::zigzagMovement(sf::Sprite* sprite, sf::Time elapsedTime, int ennemyFrameSize)
+void Game::zigzagMovement(sf::Sprite* sprite, sf::Time elapsedTime, int movementSize)
 {
+    
+    horizontalBackAndForthMovement(sprite, elapsedTime, movementSize);
+    Game::horizontalMovesCounter++;
+    if (Game::horizontalMovesCounter == 7) {
+        verticalBackAndForthMovement(sprite, elapsedTime, movementSize);
+        Game::horizontalMovesCounter = 0;
+    }
 }
 
 void Game::initSprite() {
