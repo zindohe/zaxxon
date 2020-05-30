@@ -30,6 +30,7 @@ shared_ptr<Entity> EntityFactory::createEntity(EntityType type, const sf::Vector
 
 	entity->size = texture->getSize();
 	entity->sprite = sprite;
+	entity->framePosition = 0;
 
 	return entity;
 }

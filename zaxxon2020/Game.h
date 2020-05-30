@@ -12,13 +12,13 @@ class Game
 	private:
 		void processEvents();
 		void handlePlayerActions(sf::Keyboard::Key key, bool isPressed);
-		void handleEnemiesMovement(sf::Sprite* sprite, sf::Time elapsedTime, MovementType movementType, int movementSize);
+		void handleEnemiesMovement(std::shared_ptr<Entity> entity, sf::Time elapsedTime, MovementType movementType, int movementSize);
 		void update(sf::Time elapsedTime);
 
-		void verticalBackAndForthMovement(sf::Sprite* sprite, sf::Time elapsedTime, int movementSize);
-		void horizontalBackAndForthMovement(sf::Sprite* sprite, sf::Time elapsedTime, int movementSize);
-		void circleMovement(sf::Sprite* sprite, sf::Time elapsedTime, int movementSize);
-		void zigzagMovement(sf::Sprite* sprite, sf::Time elapsedTime, int movementSize);
+		void verticalBackAndForthMovement(std::shared_ptr<Entity> entity, sf::Time elapsedTime, int movementSize);
+		void horizontalBackAndForthMovement(std::shared_ptr<Entity> entity, sf::Time elapsedTime, int movementSize);
+		void circleMovement(std::shared_ptr<Entity> entity, sf::Time elapsedTime, int movementSize);
+		void zigzagMovement(std::shared_ptr<Entity> entity, sf::Time elapsedTime, int movementSize);
 
 
 		sf::RenderWindow mainWindow; // Fen�tre Principale o� l'on va poser des elements graphique

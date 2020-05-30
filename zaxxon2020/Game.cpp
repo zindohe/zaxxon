@@ -99,15 +99,15 @@ void Game::update(sf::Time elapsedTime)
         }
         else if (entity->type == EntityType::EnnemyAlphaHorizontalLeft)
         {
-            handleEnemiesMovement(&entity->sprite, elapsedTime, MovementType::Zigzag, 1500);
+            handleEnemiesMovement(entity, elapsedTime, MovementType::VerticalBackAndForth, 150);
         }
         else if (entity->type == EntityType::EnnemyBetaHorizontalLeft)
         {
-            handleEnemiesMovement(&entity->sprite, elapsedTime, MovementType::Circle, 5);
+            handleEnemiesMovement(entity, elapsedTime, MovementType::VerticalBackAndForth, 50);
         }
         else if (entity->type == EntityType::EnnemyBoss)
         {
-            handleEnemiesMovement(&entity->sprite, elapsedTime, MovementType::HorizontalBackAndForth, 50);
+            handleEnemiesMovement(entity, elapsedTime, MovementType::HorizontalBackAndForth, 50);
         }
 
         // entity->sprite.move(movement * elapsedTime.asSeconds());
@@ -115,20 +115,20 @@ void Game::update(sf::Time elapsedTime)
     Game::entities_angle += 50.f;
 }
 
-void Game::handleEnemiesMovement(sf::Sprite* sprite, sf::Time elapsedTime, MovementType movementType, int movementSize) {
+void Game::handleEnemiesMovement(std::shared_ptr<Entity> entity, sf::Time elapsedTime, MovementType movementType, int movementSize) {
    switch (movementType)
     {
     case VerticalBackAndForth:
-        verticalBackAndForthMovement(sprite, elapsedTime, movementSize);
+        verticalBackAndForthMovement(entity, elapsedTime, movementSize);
         break;
     case HorizontalBackAndForth:
-        horizontalBackAndForthMovement(sprite, elapsedTime, movementSize);
+        horizontalBackAndForthMovement(entity, elapsedTime, movementSize);
         break;
     case Circle:
-        circleMovement(sprite, elapsedTime, movementSize);
+        circleMovement(entity, elapsedTime, movementSize);
         break;
     case Zigzag:
-        zigzagMovement(sprite, elapsedTime, movementSize);
+        zigzagMovement(entity, elapsedTime, movementSize);
         break;
     default:
         printf("handleEnemiesMovement() : No movement type type provided !");
@@ -137,55 +137,54 @@ void Game::handleEnemiesMovement(sf::Sprite* sprite, sf::Time elapsedTime, Movem
 }
 
 
-void Game::verticalBackAndForthMovement(sf::Sprite* sprite, sf::Time elapsedTime, int ennemyFrameSize)
+void Game::verticalBackAndForthMovement(std::shared_ptr<Entity> entity, sf::Time elapsedTime, int ennemyFrameSize)
 {
     sf::Vector2f movement(0.f, 0.f);
 
-    if (Game::verticalEnemyFramePos == ennemyFrameSize)
-        verticalEnemyFramePos = 0;
+    if (entity->framePosition >= ennemyFrameSize)
+        entity->framePosition = 0;
 
-    if (Game::verticalEnemyFramePos < ennemyFrameSize/2) {
+    if (entity->framePosition < ennemyFrameSize/2) {
         movement.y -= EnemiesSpeed;
     }
-    else if (Game::verticalEnemyFramePos >= ennemyFrameSize/2) {
+    else if (entity->framePosition >= ennemyFrameSize/2) {
         movement.y += EnemiesSpeed;
     }
-    Game::verticalEnemyFramePos += 1;
+    entity->framePosition += 1;
 
-    sprite->move(movement * elapsedTime.asSeconds());
+    entity->sprite.move(movement * elapsedTime.asSeconds());
 }
 
-void Game::horizontalBackAndForthMovement(sf::Sprite* sprite, sf::Time elapsedTime, int ennemyFrameSize)
+void Game::horizontalBackAndForthMovement(std::shared_ptr<Entity> entity, sf::Time elapsedTime, int ennemyFrameSize)
 {
     sf::Vector2f movement(0.f, 0.f);
 
-    if (Game::horizontalEnemyFramePos == ennemyFrameSize)
-        horizontalEnemyFramePos = 0;
+    if (entity->framePosition >= ennemyFrameSize)
+        entity->framePosition = 0;
 
-    if (Game::horizontalEnemyFramePos < ennemyFrameSize / 2) {
+    if (entity->framePosition < ennemyFrameSize / 2) {
         movement.x -= EnemiesSpeed;
     }
-    else if (Game::horizontalEnemyFramePos >= ennemyFrameSize / 2) {
+    else if (entity->framePosition >= ennemyFrameSize / 2) {
         movement.x += EnemiesSpeed;
     }
-    Game::horizontalEnemyFramePos += 1;
+    entity->framePosition += 1;
 
-    sprite->move(movement * elapsedTime.asSeconds());
+    entity->sprite.move(movement * elapsedTime.asSeconds());
 }
 
-void Game::circleMovement(sf::Sprite* sprite, sf::Time elapsedTime, int circleSize)
+void Game::circleMovement(std::shared_ptr<Entity> entity, sf::Time elapsedTime, int circleSize)
 {
-    // sprite->move(cos(Game::entities_angle) * elapsedTime.asSeconds() * EnemiesSpeed, sin(Game::entities_angle) * elapsedTime.asSeconds() * EnemiesSpeed);
-    sprite->move(sf::Vector2f(circleSize * cos(Game::entities_angle), circleSize * sin(Game::entities_angle)));
+    // entity->sprite.move(cos(Game::entities_angle) * elapsedTime.asSeconds() * EnemiesSpeed, sin(Game::entities_angle) * elapsedTime.asSeconds() * EnemiesSpeed);
+    entity->sprite.move(sf::Vector2f(circleSize * cos(Game::entities_angle), circleSize * sin(Game::entities_angle)));
 }
 
-void Game::zigzagMovement(sf::Sprite* sprite, sf::Time elapsedTime, int movementSize)
+void Game::zigzagMovement(std::shared_ptr<Entity> entity, sf::Time elapsedTime, int movementSize)
 {
-    
-    horizontalBackAndForthMovement(sprite, elapsedTime, movementSize);
+    horizontalBackAndForthMovement(entity, elapsedTime, movementSize);
     Game::horizontalMovesCounter++;
     if (Game::horizontalMovesCounter == 7) {
-        verticalBackAndForthMovement(sprite, elapsedTime, movementSize);
+        verticalBackAndForthMovement(entity, elapsedTime, movementSize);
         Game::horizontalMovesCounter = 0;
     }
 }
