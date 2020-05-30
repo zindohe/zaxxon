@@ -99,21 +99,25 @@ void Game::update(sf::Time elapsedTime)
         }
         else if (entity->type == EntityType::EnnemyAlphaHorizontalLeft)
         {
-            handleEnemiesMovement(&entity->sprite, elapsedTime, MovementType::VerticalBackAndForth);
+            handleEnemiesMovement(&entity->sprite, elapsedTime, MovementType::VerticalBackAndForth, 1500);
+        }
+        else if (entity->type == EntityType::EnnemyBetaHorizontalLeft) 
+        {
+            handleEnemiesMovement(&entity->sprite, elapsedTime, MovementType::HorizontalBackAndForth, 400);
         }
 
         // entity->sprite.move(movement * elapsedTime.asSeconds());
     }
 }
 
-void Game::handleEnemiesMovement(sf::Sprite* sprite, sf::Time elapsedTime, MovementType movementType) {
+void Game::handleEnemiesMovement(sf::Sprite* sprite, sf::Time elapsedTime, MovementType movementType, int movementSize) {
    switch (movementType)
     {
     case VerticalBackAndForth:
-        verticalBackAndForthMovement(sprite, elapsedTime);
+        verticalBackAndForthMovement(sprite, elapsedTime, movementSize);
         break;
     case HorizontalBackAndForth:
-        printf("handleEnemiesMovement() : HorizontalBackAndForth movement type not implemented !");
+        horizontalBackAndForthMovement(sprite, elapsedTime, movementSize);
         break;
     case Circle:
         printf("handleEnemiesMovement() : Circle movement type not implemented !");
@@ -128,17 +132,17 @@ void Game::handleEnemiesMovement(sf::Sprite* sprite, sf::Time elapsedTime, Movem
 }
 
 
-void Game::verticalBackAndForthMovement(sf::Sprite* sprite, sf::Time elapsedTime)
+void Game::verticalBackAndForthMovement(sf::Sprite* sprite, sf::Time elapsedTime, int ennemyFrameSize)
 {
     sf::Vector2f movement(0.f, 0.f);
 
-    if (Game::verticalEnemyFramePos == 1000)
+    if (Game::verticalEnemyFramePos == ennemyFrameSize)
         verticalEnemyFramePos = 0;
 
-    if (Game::verticalEnemyFramePos < 500) {
+    if (Game::verticalEnemyFramePos < ennemyFrameSize/2) {
         movement.y -= EnemiesSpeed;
     }
-    else if (Game::verticalEnemyFramePos >= 500) {
+    else if (Game::verticalEnemyFramePos >= ennemyFrameSize/2) {
         movement.y += EnemiesSpeed;
     }
     Game::verticalEnemyFramePos += 1;
@@ -146,15 +150,29 @@ void Game::verticalBackAndForthMovement(sf::Sprite* sprite, sf::Time elapsedTime
     sprite->move(movement * elapsedTime.asSeconds());
 }
 
-void Game::horizontalBackAndForthMovement(sf::Sprite* sprite, sf::Time elapsedTime)
+void Game::horizontalBackAndForthMovement(sf::Sprite* sprite, sf::Time elapsedTime, int ennemyFrameSize)
+{
+    sf::Vector2f movement(0.f, 0.f);
+
+    if (Game::horizontalEnemyFramePos == ennemyFrameSize)
+        horizontalEnemyFramePos = 0;
+
+    if (Game::horizontalEnemyFramePos < ennemyFrameSize / 2) {
+        movement.x -= EnemiesSpeed;
+    }
+    else if (Game::horizontalEnemyFramePos >= ennemyFrameSize / 2) {
+        movement.x += EnemiesSpeed;
+    }
+    Game::horizontalEnemyFramePos += 1;
+
+    sprite->move(movement * elapsedTime.asSeconds());
+}
+
+void Game::circleMovement(sf::Sprite* sprite, sf::Time elapsedTime, int ennemyFrameSize)
 {
 }
 
-void Game::circleMovement(sf::Sprite* sprite, sf::Time elapsedTime)
-{
-}
-
-void Game::zigzagMovement(sf::Sprite* sprite, sf::Time elapsedTime)
+void Game::zigzagMovement(sf::Sprite* sprite, sf::Time elapsedTime, int ennemyFrameSize)
 {
 }
 
@@ -192,11 +210,11 @@ void Game::initSprite() {
 
 
     shared_ptr<Entity> ennemyAlphaHorizontalLeft = EntityFactory::createEntity(EntityType::EnnemyAlphaHorizontalLeft,
-                                                                                sf::Vector2f(900.f, 0.f), true);
+                                                                                sf::Vector2f(800.f, 150.f), true);
     // Ennemies Alpha
     EntityManager::entities.push_back(ennemyAlphaHorizontalLeft);
 
-    for (float y = ennemyAlphaHorizontalLeft->size.y + 20.f; y < 580; y += ennemyAlphaHorizontalLeft->size.y + 20.f)
+    for (float y = ennemyAlphaHorizontalLeft->size.y + 170.f; y < 580; y += ennemyAlphaHorizontalLeft->size.y + 20.f)
     {
         shared_ptr<Entity> ennemyAlphaHorizontalLeft = EntityFactory::createEntity(EntityType::EnnemyAlphaHorizontalLeft,
                                                                                     sf::Vector2f(800.f, y), true);

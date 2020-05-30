@@ -12,13 +12,13 @@ class Game
 	private:
 		void processEvents();
 		void handlePlayerActions(sf::Keyboard::Key key, bool isPressed);
-		void handleEnemiesMovement(sf::Sprite* sprite, sf::Time elapsedTime, MovementType movementType);
+		void handleEnemiesMovement(sf::Sprite* sprite, sf::Time elapsedTime, MovementType movementType, int movementSize);
 		void update(sf::Time elapsedTime);
 
-		void verticalBackAndForthMovement(sf::Sprite* sprite, sf::Time elapsedTime);
-		void horizontalBackAndForthMovement(sf::Sprite* sprite, sf::Time elapsedTime);
-		void circleMovement(sf::Sprite* sprite, sf::Time elapsedTime);
-		void zigzagMovement(sf::Sprite* sprite, sf::Time elapsedTime);
+		void verticalBackAndForthMovement(sf::Sprite* sprite, sf::Time elapsedTime, int movementSize);
+		void horizontalBackAndForthMovement(sf::Sprite* sprite, sf::Time elapsedTime, int movementSize);
+		void circleMovement(sf::Sprite* sprite, sf::Time elapsedTime, int movementSize);
+		void zigzagMovement(sf::Sprite* sprite, sf::Time elapsedTime, int movementSize);
 
 
 		sf::RenderWindow mainWindow; // Fen�tre Principale o� l'on va poser des elements graphique
@@ -34,5 +34,6 @@ class Game
 		bool isLeftPressed = false;
 		bool isRightPressed = false;
 		int verticalEnemyFramePos = 0;
+		int horizontalEnemyFramePos = 0;
 };
 
