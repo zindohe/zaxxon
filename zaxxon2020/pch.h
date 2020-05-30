@@ -21,6 +21,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
 
+#define PI 3.14159265359
 #pragma comment(lib, "sfml-audio-d.lib")
 #pragma comment(lib, "sfml-graphics-d.lib")
 #pragma comment(lib, "sfml-main-d.lib")

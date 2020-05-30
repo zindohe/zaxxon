@@ -101,13 +101,18 @@ void Game::update(sf::Time elapsedTime)
         {
             handleEnemiesMovement(&entity->sprite, elapsedTime, MovementType::VerticalBackAndForth, 1500);
         }
-        else if (entity->type == EntityType::EnnemyBetaHorizontalLeft) 
+        else if (entity->type == EntityType::EnnemyBetaHorizontalLeft)
         {
-            handleEnemiesMovement(&entity->sprite, elapsedTime, MovementType::HorizontalBackAndForth, 400);
+            handleEnemiesMovement(&entity->sprite, elapsedTime, MovementType::Circle, 5);
+        }
+        else if (entity->type == EntityType::EnnemyBoss)
+        {
+            handleEnemiesMovement(&entity->sprite, elapsedTime, MovementType::HorizontalBackAndForth, 50);
         }
 
         // entity->sprite.move(movement * elapsedTime.asSeconds());
     }
+    Game::entities_angle += 50.f;
 }
 
 void Game::handleEnemiesMovement(sf::Sprite* sprite, sf::Time elapsedTime, MovementType movementType, int movementSize) {
@@ -120,7 +125,7 @@ void Game::handleEnemiesMovement(sf::Sprite* sprite, sf::Time elapsedTime, Movem
         horizontalBackAndForthMovement(sprite, elapsedTime, movementSize);
         break;
     case Circle:
-        printf("handleEnemiesMovement() : Circle movement type not implemented !");
+        circleMovement(sprite, elapsedTime, movementSize);
         break;
     case Zigzag:
         printf("handleEnemiesMovement() : Zigzag movement type not implemented !");
@@ -168,8 +173,10 @@ void Game::horizontalBackAndForthMovement(sf::Sprite* sprite, sf::Time elapsedTi
     sprite->move(movement * elapsedTime.asSeconds());
 }
 
-void Game::circleMovement(sf::Sprite* sprite, sf::Time elapsedTime, int ennemyFrameSize)
+void Game::circleMovement(sf::Sprite* sprite, sf::Time elapsedTime, int circleSize)
 {
+    // sprite->move(cos(Game::entities_angle) * elapsedTime.asSeconds() * EnemiesSpeed, sin(Game::entities_angle) * elapsedTime.asSeconds() * EnemiesSpeed);
+    sprite->move(sf::Vector2f(circleSize * cos(Game::entities_angle), circleSize * sin(Game::entities_angle)));
 }
 
 void Game::zigzagMovement(sf::Sprite* sprite, sf::Time elapsedTime, int ennemyFrameSize)
