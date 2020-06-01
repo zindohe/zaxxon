@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Action.h"
+#include "Action2.h"
 
 #include "EntityManager.h"
 #include "EntityFactory.h"
@@ -27,7 +27,7 @@ void Action::PlayerLeftMove() {
 }
 
 void Action::PlayerRightMove(const float windowWidthSize) {
-	
+
 	shared_ptr<Entity> player = EntityManager::GetPlayer();
 	if (player->sprite.getPosition().x + player->size.x < windowWidthSize - PlayerSpeed)
 	{
@@ -37,24 +37,25 @@ void Action::PlayerRightMove(const float windowWidthSize) {
 }
 
 void Action::PlayerUpMove() {
-	
+
 	shared_ptr<Entity> player = EntityManager::GetPlayer();
-	if (player->sprite.getPosition().y > PlayerSpeed )
+	if (player->sprite.getPosition().y > PlayerSpeed)
 	{
 		sf::Vector2f movement(0.f, -PlayerSpeed);
 		player->sprite.move(movement);
 	}
-	
+
 }
 
 void Action::PlayerDownMove(const float windowHeightSize) {
-	
+
 	shared_ptr<Entity> player = EntityManager::GetPlayer();
 
-	if (player->sprite.getPosition().y + player->size.y  < windowHeightSize - PlayerSpeed)
+	if (player->sprite.getPosition().y + player->size.y < windowHeightSize - PlayerSpeed)
 	{
 		sf::Vector2f movement(0.f, PlayerSpeed);
 		player->sprite.move(movement);
 	}
 
 }
+

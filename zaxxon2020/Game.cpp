@@ -3,8 +3,8 @@
 
 #include "EntityManager.h"
 #include "EntityFactory.h"
-#include "Action.h"
-#include "HandleManager.h"
+#include "Action2.h"
+#include "HandleManager2.h"
 
 const float Game::PlayerSpeed = 10.f;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);

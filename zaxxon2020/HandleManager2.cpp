@@ -1,13 +1,13 @@
 #include "pch.h"
-#include "HandleManager.h"
+#include "HandleManager2.h"
 
 #include "EntityManager.h"
 
-void HandleManager::HandlePlayerLaserMove(const float windowWidthSize) 
+void HandleManager::HandlePlayerLaserMove(const float windowWidthSize)
 {
     for (shared_ptr<Entity> entity : EntityManager::entities)
     {
-        if ( entity->enabled == false || entity->type != EntityType::PlayerLaser)
+        if (entity->enabled == false || entity->type != EntityType::PlayerLaser)
         {
             continue;
         }
