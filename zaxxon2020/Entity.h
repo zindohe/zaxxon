@@ -16,6 +16,14 @@ enum EntityType
 	None
 };
 
+enum MovementType
+{
+	VerticalBackAndForth,
+	HorizontalBackAndForth,
+	Circle,
+	Zigzag
+};
+
 class Entity
 {
 
@@ -29,5 +37,6 @@ class Entity
 		sf::Vector2f position;
 		EntityType type;
 		bool enabled; //	True on affiche, False on ne l'affiche pas
+		int framePosition;
 };
 
