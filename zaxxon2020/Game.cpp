@@ -15,8 +15,7 @@ Game::Game() :  mainWindow(sf::VideoMode(1200, 800), "ZAXXON 2020 HD", sf::Style
                 isDownPressed(false),
                 isLeftPressed(false),
                 isRightPressed(false),
-                isSpacePressed(false),
-                updateTime()
+                isSpacePressed(false)
 {
     EntityFactory::loadTextures();
     initSprite();
@@ -27,16 +26,15 @@ Game::~Game() {
 
 void Game::initSprite() {
 
-    shared_ptr<Entity> background = EntityFactory::createEntity(EntityType::Background, sf::Vector2f(0.f, 0.f), true);
+    shared_ptr<Entity> stage1 = EntityFactory::createEntity(EntityType::Stage1, sf::Vector2f(0.f, 0.f), true);
+    float pos_x_stage2 = stage1->position.x + stage1->size.x;
+    shared_ptr<Entity> stage2 = EntityFactory::createEntity(EntityType::Stage2, sf::Vector2f(pos_x_stage2, 0.f), true);
+
+    EntityManager::entities.push_back(stage1);
+    EntityManager::entities.push_back(stage2);
+
 
     shared_ptr<Entity> player = EntityFactory::createEntity(EntityType::Player, sf::Vector2f(100.f, 100.f), true);
-
-
-    shared_ptr<Entity> delimiter = EntityFactory::createEntity(EntityType::Delimiter, sf::Vector2f(600.f, 0.f), true);
-
-
-    EntityManager::entities.push_back(background);
-    EntityManager::entities.push_back(delimiter);
 
     EntityManager::entities.push_back(player);
 
@@ -69,6 +67,8 @@ void Game::initSprite() {
         //Ennemy Boss
         sf::Vector2f(1000.f, 120.f), true);
     EntityManager::entities.push_back(ennemyBoss);
+
+    
 }
 
 
@@ -79,6 +79,7 @@ void Game::run() {
     while (mainWindow.isOpen())
     {
         sf::Time elapsedTime = clock.restart();
+
         timeSinceLastUpdate += elapsedTime;
         while (timeSinceLastUpdate > TimePerFrame)
         {
@@ -160,6 +161,7 @@ void Game::update(sf::Time elapsedTime)
 {
     for (std::shared_ptr<Entity> entity : EntityManager::entities)
     {
+
         if (entity->enabled == false)
         {
             continue;
@@ -175,6 +177,18 @@ void Game::update(sf::Time elapsedTime)
         else if (entity->type == EntityType::EnnemyBoss)
         {
             handleEnemiesMovement(entity, elapsedTime, MovementType::HorizontalBackAndForth, 50);
+        }
+        else if (entity->type == EntityType::Stage1 ||
+                 entity->type == EntityType::Stage2 ||
+                 entity->type == EntityType::Stage3 ||
+                 entity->type == EntityType::Stage4 ||
+                 entity->type == EntityType::Stage5 ||
+                 entity->type == EntityType::Stage6 || 
+                 entity->type == EntityType::Stage7 || 
+                 entity->type == EntityType::Stage8 || 
+                 entity->type == EntityType::Stage9 )
+        {
+            HandleManager::HandleBackgrounfMovement(entity, mainWindow.getSize().x);
         }
 
         // entity->sprite.move(movement * elapsedTime.asSeconds());
@@ -262,12 +276,8 @@ void Game::zigzagMovement(std::shared_ptr<Entity> entity, sf::Time elapsedTime, 
 
 void Game::updateHandleManagement(sf::Time elapsedTime)
 {
-    updateTime += elapsedTime;
-    if (updateTime >= sf::seconds(1.0f))
-    {
-        
-    }
     HandleManager::HandlePlayerLaserMove(this->mainWindow.getSize().x);
+
    
 }
 
