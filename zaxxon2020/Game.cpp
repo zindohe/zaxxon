@@ -33,42 +33,11 @@ void Game::initSprite() {
     EntityManager::entities.push_back(stage1);
     EntityManager::entities.push_back(stage2);
 
-
     shared_ptr<Entity> player = EntityFactory::createEntity(EntityType::Player, sf::Vector2f(100.f, 100.f), true);
 
     EntityManager::entities.push_back(player);
 
-    shared_ptr<Entity> ennemyAlphaHorizontalLeft = EntityFactory::createEntity(EntityType::EnnemyAlphaHorizontalLeft,
-        sf::Vector2f(900.f, 0.f), true);
-    // Ennemies Alpha
-    EntityManager::entities.push_back(ennemyAlphaHorizontalLeft);
-
-    for (float y = ennemyAlphaHorizontalLeft->size.y + 20.f; y < 580; y += ennemyAlphaHorizontalLeft->size.y + 20.f)
-    {
-        shared_ptr<Entity> ennemyAlphaHorizontalLeft = EntityFactory::createEntity(EntityType::EnnemyAlphaHorizontalLeft,
-            sf::Vector2f(800.f, y), true);
-        EntityManager::entities.push_back(ennemyAlphaHorizontalLeft);
-    }
-
-    //Ennemies Beta
-    shared_ptr<Entity> ennemyBetaHorizontalLeft = EntityFactory::createEntity(EntityType::EnnemyBetaHorizontalLeft,
-        sf::Vector2f(900.f, 0.f), true);
-    EntityManager::entities.push_back(ennemyBetaHorizontalLeft);
-
-    for (float y = ennemyBetaHorizontalLeft->size.y + 20.f; y < 580; y += ennemyBetaHorizontalLeft->size.y + 20.f)
-    {
-        shared_ptr<Entity> ennemyBetaHorizontalLeft = EntityFactory::createEntity(EntityType::EnnemyBetaHorizontalLeft,
-            sf::Vector2f(900.f, y), true);
-
-        EntityManager::entities.push_back(ennemyBetaHorizontalLeft);
-    }
-
-    shared_ptr<Entity> ennemyBoss = EntityFactory::createEntity(EntityType::EnnemyBoss,
-        //Ennemy Boss
-        sf::Vector2f(1000.f, 120.f), true);
-    EntityManager::entities.push_back(ennemyBoss);
-
-    
+    HandleManager::EnnemiesStage1(mainWindow.getSize());
 }
 
 
@@ -87,6 +56,7 @@ void Game::run() {
 
             processEvents();
             update(TimePerFrame);
+            
         }
         updateHandleManagement(elapsedTime);
         render();
@@ -159,9 +129,11 @@ void Game::handlePlayerActions(sf::Keyboard::Key key, bool isPressed)
 
 void Game::update(sf::Time elapsedTime)
 {
+
+    HandleManager::HandleBackgroundMovement(EntityManager::entities.at(0), mainWindow.getSize());
+    HandleManager::HandleBackgroundMovement(EntityManager::entities.at(1), mainWindow.getSize());
     for (std::shared_ptr<Entity> entity : EntityManager::entities)
     {
-
         if (entity->enabled == false)
         {
             continue;
@@ -178,21 +150,9 @@ void Game::update(sf::Time elapsedTime)
         {
             handleEnemiesMovement(entity, elapsedTime, MovementType::HorizontalBackAndForth, 50);
         }
-        else if (entity->type == EntityType::Stage1 ||
-                 entity->type == EntityType::Stage2 ||
-                 entity->type == EntityType::Stage3 ||
-                 entity->type == EntityType::Stage4 ||
-                 entity->type == EntityType::Stage5 ||
-                 entity->type == EntityType::Stage6 || 
-                 entity->type == EntityType::Stage7 || 
-                 entity->type == EntityType::Stage8 || 
-                 entity->type == EntityType::Stage9 )
-        {
-            HandleManager::HandleBackgrounfMovement(entity, mainWindow.getSize().x);
-        }
 
-        // entity->sprite.move(movement * elapsedTime.asSeconds());
     }
+
     Game::entities_angle += 50.f;
     // handle player actions consequences there
     handlePlayerMove();
