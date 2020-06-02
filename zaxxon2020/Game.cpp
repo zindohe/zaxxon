@@ -145,13 +145,13 @@ void Game::handlePlayerActions(sf::Keyboard::Key key, bool isPressed)
         isRightPressed = isPressed;
     else if (key == sf::Keyboard::Space)
     {
-        if ( isPressed == false || isSpacePressed == true)
-        {
+        if ( !isPressed ) {
             isSpacePressed = false;
-            return;
         }
-        isSpacePressed = isPressed;
-        Action::PlayerFireLaser();
+        else  if (isPressed && isSpacePressed == false){
+            isSpacePressed = true;
+            Action::PlayerFireLaser();
+        }
     }
         
 }
@@ -182,6 +182,7 @@ void Game::update(sf::Time elapsedTime)
     Game::entities_angle += 50.f;
     // handle player actions consequences there
     handlePlayerMove();
+
         
 }
 
