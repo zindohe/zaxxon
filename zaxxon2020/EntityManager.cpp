@@ -31,3 +31,11 @@ shared_ptr<Entity> EntityManager::GetPlayer()
 
 	return nullptr;
 }
+
+bool EntityManager::isEnnemy(std::shared_ptr<Entity> entity)
+{
+	if (entity->type == EntityType::EnnemyAlphaHorizontalLeft || entity->type == EntityType::EnnemyBetaHorizontalLeft) {
+		return true;
+	}
+	return false;
+}
