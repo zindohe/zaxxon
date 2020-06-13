@@ -27,6 +27,10 @@ class Game
 		void HandleTexts();
 		void HandleCollisionPlayerEnnemy();
 		void HandleCollisionPlayerLaserEnnemy();
+		void HandleEnnemyFiring();
+		void HandleEnnemyLasersMovement();
+		void HandleCollisionEnnemyLaserPlayer();
+
 
 		void verticalBackAndForthMovement(std::shared_ptr<Entity> entity, sf::Time elapsedTime, int movementSize);
 		void horizontalBackAndForthMovement(std::shared_ptr<Entity> entity, sf::Time elapsedTime, int movementSize);
@@ -53,6 +57,7 @@ class Game
 		static const float EnemiesSpeed;
 
 		bool gameOver = false;
+		bool isEnnemyFiring = false;
 
 		sf::Time updateTime;
 		sf::Text fpsText;

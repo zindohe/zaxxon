@@ -37,6 +37,9 @@ Game::~Game() {
 
 void Game::initSprite() {
 
+    gameOver = false;
+    isEnnemyFiring = false;
+
     shared_ptr<Entity> background = EntityFactory::createEntity(EntityType::Background, sf::Vector2f(0.f, 0.f), true);
 
     shared_ptr<Entity> player = EntityFactory::createEntity(EntityType::Player, sf::Vector2f(100.f, 100.f), true);
@@ -324,22 +327,9 @@ void Game::updateHandleManagement(sf::Time elapsedTime)
         HandleGameOver();
         HandleCollisionPlayerEnnemy();
         HandleCollisionPlayerLaserEnnemy();
-        /*HandleGameOver();
-        HandleCollisionWeaponEnemy();
-        HandleCollisionWeaponPlayer();
-        HandleCollisionWeaponBlock();
-        HandleCollisionEnemyWeaponBlock();
-        HandleCollisionEnemyMasterWeaponBlock();
-        HandleCollisionEnemyMasterWeaponPlayer();
-        HandleCollisionBlockEnemy();
-        HandleCollisionWeaponEnemyMaster();
-        HanldeWeaponMoves();
-        HanldeEnemyWeaponMoves();
-        HanldeEnemyMasterWeaponMoves();
-        HandleEnemyMoves();
-        HandleEnemyMasterMove();
-        HandleEnemyWeaponFiring();
-        HandleEnemyMasterWeaponFiring();*/
+        HandleEnnemyFiring();
+        HandleEnnemyLasersMovement();
+        HandleCollisionEnnemyLaserPlayer();
     }
 }
 
@@ -455,6 +445,125 @@ void Game::GameOver()
 
         gameOver = true;
     }
+}
+
+void Game::HandleEnnemyFiring()
+{
+    //
+    // Handle Ennemies firing lasers
+    //
+    if (isEnnemyFiring == true)
+        return;
+
+    std::vector<std::shared_ptr<Entity>>::reverse_iterator rit = EntityManager::entities.rbegin();
+    for (; rit != EntityManager::entities.rend(); rit++)
+    {
+        std::shared_ptr<Entity> entity = *rit;
+
+        if (entity->enabled == false)
+        {
+            continue;
+        }
+
+        if (!EntityManager::isEnnemy(entity))
+        {
+            continue;
+        }
+
+        int r = rand() % 20;
+        if (r != 10)
+            continue;
+
+        sf::Vector2f firePos = sf::Vector2f(entity->sprite.getPosition().x-20, entity->sprite.getPosition().y);
+
+        std::shared_ptr<Entity> ennemyFire = EntityFactory::createEntity(EntityType::LaserRedHorizontal, firePos, true);
+
+        EntityManager::entities.push_back(ennemyFire);
+
+        isEnnemyFiring = true;
+        break;
+    }
+}
+
+void Game::HandleEnnemyLasersMovement()
+{
+    //
+    // Handle Ennemies lasers movement
+    //
+    if (isEnnemyFiring == false)
+    {
+        return;
+    }
+
+    for (std::shared_ptr<Entity> entity : EntityManager::entities)
+    {
+        if (entity->enabled == false)
+        {
+            continue;
+        }
+
+        if (entity->type != EntityType::LaserRedHorizontal)
+        {
+            continue;
+        }
+
+        float x, y;
+        x = entity->sprite.getPosition().x;
+        y = entity->sprite.getPosition().y;
+        x -= 0.5f;
+
+        if (x <= 0)
+        {
+            EntityManager::deleteEntity(entity);
+            //entity->enabled = false;
+            isEnnemyFiring = false;
+            return;
+        }
+        else
+        {
+            entity->sprite.setPosition(x, y);
+        }
+
+    }
+}
+
+void Game::HandleCollisionEnnemyLaserPlayer()
+{
+    //
+    //  Handle Collisions between ennemies laser and player
+    //
+
+    for (std::shared_ptr<Entity> entity : EntityManager::entities)
+    {
+        if (entity->enabled == false)
+        {
+            continue;
+        }
+
+        if (entity->type != EntityType::LaserRedHorizontal)
+        {
+            continue;
+        }
+
+        sf::FloatRect laserBound;
+        laserBound = entity->sprite.getGlobalBounds();
+
+        sf::FloatRect boundPlayer;
+        boundPlayer = EntityManager::GetPlayer()->sprite.getGlobalBounds();
+
+        if (laserBound.intersects(boundPlayer) == true)
+        {
+            EntityManager::deleteEntity(entity);
+            isEnnemyFiring = false;
+            pLives--;
+            //break;
+            goto end;
+        }
+    }
+
+end:
+    //nop
+    return;
 }
 
 void Game::handlePlayerMove() {
