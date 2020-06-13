@@ -26,6 +26,7 @@ class Game
 		void GameOver();
 		void HandleTexts();
 		void HandleCollisionPlayerEnnemy();
+		void HandleCollisionPlayerLaserEnnemy();
 
 		void verticalBackAndForthMovement(std::shared_ptr<Entity> entity, sf::Time elapsedTime, int movementSize);
 		void horizontalBackAndForthMovement(std::shared_ptr<Entity> entity, sf::Time elapsedTime, int movementSize);

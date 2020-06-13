@@ -323,6 +323,7 @@ void Game::updateHandleManagement(sf::Time elapsedTime)
         HandleTexts();
         HandleGameOver();
         HandleCollisionPlayerEnnemy();
+        HandleCollisionPlayerLaserEnnemy();
         /*HandleGameOver();
         HandleCollisionWeaponEnemy();
         HandleCollisionWeaponPlayer();
@@ -353,6 +354,8 @@ void Game::HandleTexts()
 
 void Game::HandleCollisionPlayerEnnemy()
 {
+    // Handle collision between the player and a regular ennemy
+
     for (std::shared_ptr<Entity> entity : EntityManager::entities)
     {
         if (entity->enabled== false)
@@ -373,8 +376,48 @@ void Game::HandleCollisionPlayerEnnemy()
 
         if (ennemyBound.intersects(boundPlayer) == true)
         {
-            entity->enabled = false;
+            EntityManager::deleteEntity(entity);
             pLives--;
+            //break;
+            goto end;
+        }
+    }
+
+end:
+    //nop
+    return;
+}
+
+void Game::HandleCollisionPlayerLaserEnnemy() 
+{
+    // Handle collision between player's laser and enemies
+
+    for (std::shared_ptr<Entity> entity : EntityManager::entities)
+    {
+        if (entity->enabled == false)
+        {
+            continue;
+        }
+
+        if (!EntityManager::isEnnemy(entity))
+        {
+            continue;
+        }
+
+        sf::FloatRect ennemyBound;
+        ennemyBound = entity->sprite.getGlobalBounds();
+
+        std::shared_ptr<Entity> laser = EntityManager::GetPlayerLaser();
+        if (laser == nullptr || laser->enabled == false)
+        {
+            return;
+        }
+        sf::FloatRect boundLaser = laser->sprite.getGlobalBounds();
+
+        if (ennemyBound.intersects(boundLaser) == true)
+        {
+            EntityManager::deleteEntity(entity);
+            pScore++;
             //break;
             goto end;
         }
