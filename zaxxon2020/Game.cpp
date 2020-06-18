@@ -39,62 +39,30 @@ void Game::initSprite() {
 
     gameOver = false;
     isEnnemyFiring = false;
+    shared_ptr<Entity> stage1 = EntityFactory::createEntity(EntityType::Stage1, sf::Vector2f(0.f, 0.f), true);
+    float pos_x_stage2 = stage1->position.x + stage1->size.x;
+    shared_ptr<Entity> stage2 = EntityFactory::createEntity(EntityType::Stage2, sf::Vector2f(pos_x_stage2, 0.f), true);
 
-    shared_ptr<Entity> background = EntityFactory::createEntity(EntityType::Background, sf::Vector2f(0.f, 0.f), true);
+    EntityManager::entities.push_back(stage1);
+    EntityManager::entities.push_back(stage2);
 
     shared_ptr<Entity> player = EntityFactory::createEntity(EntityType::Player, sf::Vector2f(100.f, 100.f), true);
 
-
-    shared_ptr<Entity> delimiter = EntityFactory::createEntity(EntityType::Delimiter, sf::Vector2f(600.f, 0.f), true);
-
-
-    EntityManager::entities.push_back(background);
-    EntityManager::entities.push_back(delimiter);
-
     EntityManager::entities.push_back(player);
 
-    shared_ptr<Entity> ennemyAlphaHorizontalLeft = EntityFactory::createEntity(EntityType::EnnemyAlphaHorizontalLeft,
-        sf::Vector2f(900.f, 0.f), true);
-    // Ennemies Alpha
-    EntityManager::entities.push_back(ennemyAlphaHorizontalLeft);
-
-    for (float y = ennemyAlphaHorizontalLeft->size.y + 20.f; y < 580; y += ennemyAlphaHorizontalLeft->size.y + 20.f)
-    {
-        shared_ptr<Entity> ennemyAlphaHorizontalLeft = EntityFactory::createEntity(EntityType::EnnemyAlphaHorizontalLeft,
-            sf::Vector2f(800.f, y), true);
-        EntityManager::entities.push_back(ennemyAlphaHorizontalLeft);
-    }
-
-    //Ennemies Beta
-    shared_ptr<Entity> ennemyBetaHorizontalLeft = EntityFactory::createEntity(EntityType::EnnemyBetaHorizontalLeft,
-        sf::Vector2f(900.f, 0.f), true);
-    EntityManager::entities.push_back(ennemyBetaHorizontalLeft);
-
-    for (float y = ennemyBetaHorizontalLeft->size.y + 20.f; y < 580; y += ennemyBetaHorizontalLeft->size.y + 20.f)
-    {
-        shared_ptr<Entity> ennemyBetaHorizontalLeft = EntityFactory::createEntity(EntityType::EnnemyBetaHorizontalLeft,
-            sf::Vector2f(900.f, y), true);
-
-        EntityManager::entities.push_back(ennemyBetaHorizontalLeft);
-    }
-
-    shared_ptr<Entity> ennemyBoss = EntityFactory::createEntity(EntityType::EnnemyBoss,
-        //Ennemy Boss
-        sf::Vector2f(1000.f, 120.f), true);
-    EntityManager::entities.push_back(ennemyBoss);
-
+    HandleManager::EnnemiesStage1(mainWindow.getSize());
     pLives = 3;
     pScore = 0;
 
     // FPS
 
     fpsText.setFont(sansationFont);
-    fpsText.setPosition(5.f, 5.f);
     fpsText.setCharacterSize(10);
+    fpsText.setPosition(5.f, 5.f);
     fpsText.setFillColor(sf::Color::Red);
 
-    // Lives
 
+    // Lives
     playerLivesText.setFillColor(sf::Color::Green);
     playerLivesText.setFont(sansationFont);
     playerLivesText.setPosition(10.f, 750.f);
@@ -110,6 +78,7 @@ void Game::initSprite() {
     playerScoreText.setCharacterSize(20);
     playerScoreText.setString(std::to_string(pScore));
    
+
 }
 
 
@@ -120,6 +89,7 @@ void Game::run() {
     while (mainWindow.isOpen())
     {
         sf::Time elapsedTime = clock.restart();
+
         timeSinceLastUpdate += elapsedTime;
         while (timeSinceLastUpdate > TimePerFrame)
         {
@@ -127,6 +97,7 @@ void Game::run() {
 
             processEvents();
             update(TimePerFrame);
+            
         }
         updateHandleManagement(elapsedTime);
         render();
@@ -205,6 +176,9 @@ void Game::update(sf::Time elapsedTime)
 {
     if (gameOver == true)
         return;
+
+    HandleManager::HandleBackgroundMovement(EntityManager::entities.at(0), mainWindow.getSize());
+    HandleManager::HandleBackgroundMovement(EntityManager::entities.at(1), mainWindow.getSize());
     for (std::shared_ptr<Entity> entity : EntityManager::entities)
     {
         if (entity->enabled == false)
@@ -224,8 +198,8 @@ void Game::update(sf::Time elapsedTime)
             handleEnemiesMovement(entity, elapsedTime, MovementType::HorizontalBackAndForth, 50);
         }
 
-        // entity->sprite.move(movement * elapsedTime.asSeconds());
     }
+
     Game::entities_angle += 50.f;
     // handle player actions consequences there
     handlePlayerMove();

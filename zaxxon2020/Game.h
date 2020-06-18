@@ -13,14 +13,16 @@ class Game
 
 		void render();
 		void initSprite();
+		void update(sf::Time elapsedTime);
+		void processEvents();
 
 		void updateHandleManagement(sf::Time elapsedTime);
 		void handlePlayerMove();
 
-		void processEvents();
+		
 		void handlePlayerActions(sf::Keyboard::Key key, bool isPressed);
 		void handleEnemiesMovement(std::shared_ptr<Entity> entity, sf::Time elapsedTime, MovementType movementType, int movementSize);
-		void update(sf::Time elapsedTime);
+		
 
 		void HandleGameOver();
 		void GameOver();

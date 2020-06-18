@@ -2,7 +2,16 @@
 #include "EntityFactory.h"
 
 map<EntityType, string> EntityFactory::textureFiles = { 
-												{EntityType::Background, "sprites/galaxy.jpg"},
+												{EntityType::Stage1, "sprites/stage1.jpg"},
+												{EntityType::Stage2, "sprites/stage2.png"},
+												{EntityType::Stage3, "sprites/stage3.png"},
+												{EntityType::Stage4, "sprites/stage4.jpg"},
+												{EntityType::Stage5, "sprites/stage5.jpg"},
+												{EntityType::Stage6, "sprites/stage6.png"},
+												{EntityType::Stage7, "sprites/stage7.png"},
+												{EntityType::Stage8, "sprites/stage8.png"},
+												{EntityType::Stage9, "sprites/stage9.jpg"},
+
 												{EntityType::Player, "sprites/vaisseau.png"},
 												{EntityType::PlayerLaser, "sprites/laser_blue_horizontal.png"},
 												{EntityType::LaserBlueHorizontal, "sprites/laser_blue_horizontal.png"},
@@ -16,7 +25,6 @@ map<EntityType, string> EntityFactory::textureFiles = {
 map<EntityType, shared_ptr<sf::Texture>> EntityFactory::textures;
 
 shared_ptr<Entity> EntityFactory::createEntity(EntityType type, const sf::Vector2f &positions, bool enabled) {
-
 
 	shared_ptr<Entity> entity = make_shared<Entity>();
 	entity->type = type;
