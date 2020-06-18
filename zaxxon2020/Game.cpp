@@ -342,14 +342,9 @@ void Game::HandleCollisionPlayerEnnemy()
         {
             EntityManager::deleteEntity(entity);
             pLives--;
-            //break;
-            goto end;
+            break;
         }
     }
-
-end:
-    //nop
-    return;
 }
 
 void Game::HandleCollisionPlayerLaserEnnemy() 
@@ -382,14 +377,9 @@ void Game::HandleCollisionPlayerLaserEnnemy()
         {
             EntityManager::deleteEntity(entity);
             pScore++;
-            //break;
-            goto end;
+            break;
         }
     }
-
-end:
-    //nop
-    return;
 }
 
 void Game::HandleGameOver()
@@ -530,14 +520,9 @@ void Game::HandleCollisionEnnemyLaserPlayer()
             EntityManager::deleteEntity(entity);
             isEnnemyFiring = false;
             pLives--;
-            //break;
-            goto end;
+            break;
         }
     }
-
-end:
-    //nop
-    return;
 }
 
 void Game::handlePlayerMove() {
