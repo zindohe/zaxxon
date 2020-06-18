@@ -10,14 +10,24 @@ const float Game::PlayerSpeed = 10.f;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 const float Game::EnemiesSpeed = 100.f;
 
-Game::Game() :  mainWindow(sf::VideoMode(1200, 800), "ZAXXON 2020 HD", sf::Style::Close),
+Game::Game() : mainWindow(sf::VideoMode(1200, 800), "ZAXXON 2020 HD", sf::Style::Close),
                 isUpPressed(false),
                 isDownPressed(false),
                 isLeftPressed(false),
                 isRightPressed(false),
                 isSpacePressed(false),
+                mStatisticsNumFrames(0),
+                sansationFont(),
+                fpsText(),
                 updateTime()
 {
+    if (sansationFont.loadFromFile("Media/Sansation.ttf")) {
+        printf("Font loaded !");
+    }
+    else {
+        printf("Failed to load font");
+    }
+
     EntityFactory::loadTextures();
     initSprite();
 }
@@ -26,6 +36,9 @@ Game::~Game() {
 }
 
 void Game::initSprite() {
+
+    gameOver = false;
+    isEnnemyFiring = false;
 
     shared_ptr<Entity> background = EntityFactory::createEntity(EntityType::Background, sf::Vector2f(0.f, 0.f), true);
 
@@ -69,6 +82,34 @@ void Game::initSprite() {
         //Ennemy Boss
         sf::Vector2f(1000.f, 120.f), true);
     EntityManager::entities.push_back(ennemyBoss);
+
+    pLives = 3;
+    pScore = 0;
+
+    // FPS
+
+    fpsText.setFont(sansationFont);
+    fpsText.setPosition(5.f, 5.f);
+    fpsText.setCharacterSize(10);
+    fpsText.setFillColor(sf::Color::Red);
+
+    // Lives
+
+    playerLivesText.setFillColor(sf::Color::Green);
+    playerLivesText.setFont(sansationFont);
+    playerLivesText.setPosition(10.f, 750.f);
+    playerLivesText.setCharacterSize(20);
+    playerLivesText.setString(std::to_string(pLives));
+
+
+    // Score
+
+    playerScoreText.setFillColor(sf::Color::Green);
+    playerScoreText.setFont(sansationFont);
+    playerScoreText.setPosition(85.f, 750.f);
+    playerScoreText.setCharacterSize(20);
+    playerScoreText.setString(std::to_string(pScore));
+   
 }
 
 
@@ -125,6 +166,10 @@ void Game::render() {
         mainWindow.draw(entity->sprite);
     }
 
+    mainWindow.draw(fpsText);
+    mainWindow.draw(playerLivesText);
+    mainWindow.draw(playerScoreText);
+    mainWindow.draw(gameOverText);
     mainWindow.display();
 }
 
@@ -158,6 +203,8 @@ void Game::handlePlayerActions(sf::Keyboard::Key key, bool isPressed)
 
 void Game::update(sf::Time elapsedTime)
 {
+    if (gameOver == true)
+        return;
     for (std::shared_ptr<Entity> entity : EntityManager::entities)
     {
         if (entity->enabled == false)
@@ -166,11 +213,11 @@ void Game::update(sf::Time elapsedTime)
         }
         else if (entity->type == EntityType::EnnemyAlphaHorizontalLeft)
         {
-            handleEnemiesMovement(entity, elapsedTime, MovementType::VerticalBackAndForth, 150);
+            handleEnemiesMovement(entity, elapsedTime, MovementType::HorizontalBackAndForth, 950);
         }
         else if (entity->type == EntityType::EnnemyBetaHorizontalLeft)
         {
-            handleEnemiesMovement(entity, elapsedTime, MovementType::VerticalBackAndForth, 50);
+            handleEnemiesMovement(entity, elapsedTime, MovementType::Circle, 5);
         }
         else if (entity->type == EntityType::EnnemyBoss)
         {
@@ -262,13 +309,261 @@ void Game::zigzagMovement(std::shared_ptr<Entity> entity, sf::Time elapsedTime, 
 
 void Game::updateHandleManagement(sf::Time elapsedTime)
 {
+    mStatisticsNumFrames += 1;
     updateTime += elapsedTime;
     if (updateTime >= sf::seconds(1.0f))
     {
-        
+        fpsText.setString(std::to_string(mStatisticsNumFrames) + " FPS");
     }
+    mStatisticsNumFrames = 0;
     HandleManager::HandlePlayerLaserMove(this->mainWindow.getSize().x);
-   
+
+    if (updateTime >= sf::seconds(0.050f))
+    {
+        if (gameOver == true)
+            return;
+
+        HandleTexts();
+        HandleGameOver();
+        HandleCollisionPlayerEnnemy();
+        HandleCollisionPlayerLaserEnnemy();
+        HandleEnnemyFiring();
+        HandleEnnemyLasersMovement();
+        HandleCollisionEnnemyLaserPlayer();
+    }
+}
+
+void Game::HandleTexts()
+{
+    std::string lives = "Lives: " + std::to_string(pLives);
+    playerLivesText.setString(lives);
+    std::string score = "Score: " + std::to_string(pScore);
+    playerScoreText.setString(score);
+    return;
+}
+
+void Game::HandleCollisionPlayerEnnemy()
+{
+    // Handle collision between the player and a regular ennemy
+
+    for (std::shared_ptr<Entity> entity : EntityManager::entities)
+    {
+        if (entity->enabled== false)
+        {
+            continue;
+        }
+
+        if (!EntityManager::isEnnemy(entity))
+        {
+            continue;
+        }
+
+        sf::FloatRect ennemyBound;
+        ennemyBound = entity->sprite.getGlobalBounds();
+
+        sf::FloatRect boundPlayer;
+        boundPlayer = EntityManager::GetPlayer()->sprite.getGlobalBounds();
+
+        if (ennemyBound.intersects(boundPlayer) == true)
+        {
+            EntityManager::deleteEntity(entity);
+            pLives--;
+            //break;
+            goto end;
+        }
+    }
+
+end:
+    //nop
+    return;
+}
+
+void Game::HandleCollisionPlayerLaserEnnemy() 
+{
+    // Handle collision between player's laser and enemies
+
+    for (std::shared_ptr<Entity> entity : EntityManager::entities)
+    {
+        if (entity->enabled == false)
+        {
+            continue;
+        }
+
+        if (!EntityManager::isEnnemy(entity))
+        {
+            continue;
+        }
+
+        sf::FloatRect ennemyBound;
+        ennemyBound = entity->sprite.getGlobalBounds();
+
+        std::shared_ptr<Entity> laser = EntityManager::GetPlayerLaser();
+        if (laser == nullptr || laser->enabled == false)
+        {
+            return;
+        }
+        sf::FloatRect boundLaser = laser->sprite.getGlobalBounds();
+
+        if (ennemyBound.intersects(boundLaser) == true)
+        {
+            EntityManager::deleteEntity(entity);
+            pScore++;
+            //break;
+            goto end;
+        }
+    }
+
+end:
+    //nop
+    return;
+}
+
+void Game::HandleGameOver()
+{
+   if (EntityManager::GetPlayer()->enabled == false)
+    {
+        GameOver();
+    }
+
+    if (pLives == 0)
+    {
+        GameOver();
+    }
+}
+
+void Game::GameOver()
+{
+    if (pLives == 0)
+    {
+        gameOverText.setFillColor(sf::Color::Red);
+        gameOverText.setFont(sansationFont);
+        gameOverText.setStyle(sf::Text::Bold);
+        gameOverText.setPosition(350.f, 350.f);
+        gameOverText.setCharacterSize(80);
+
+        gameOverText.setString("GAME OVER");
+
+        gameOver = true;
+    }
+}
+
+void Game::HandleEnnemyFiring()
+{
+    //
+    // Handle Ennemies firing lasers
+    //
+    if (isEnnemyFiring == true)
+        return;
+
+    std::vector<std::shared_ptr<Entity>>::reverse_iterator rit = EntityManager::entities.rbegin();
+    for (; rit != EntityManager::entities.rend(); rit++)
+    {
+        std::shared_ptr<Entity> entity = *rit;
+
+        if (entity->enabled == false)
+        {
+            continue;
+        }
+
+        if (!EntityManager::isEnnemy(entity))
+        {
+            continue;
+        }
+
+        int r = rand() % 20;
+        if (r != 10)
+            continue;
+
+        sf::Vector2f firePos = sf::Vector2f(entity->sprite.getPosition().x-20, entity->sprite.getPosition().y);
+
+        std::shared_ptr<Entity> ennemyFire = EntityFactory::createEntity(EntityType::LaserRedHorizontal, firePos, true);
+
+        EntityManager::entities.push_back(ennemyFire);
+
+        isEnnemyFiring = true;
+        break;
+    }
+}
+
+void Game::HandleEnnemyLasersMovement()
+{
+    //
+    // Handle Ennemies lasers movement
+    //
+    if (isEnnemyFiring == false)
+    {
+        return;
+    }
+
+    for (std::shared_ptr<Entity> entity : EntityManager::entities)
+    {
+        if (entity->enabled == false)
+        {
+            continue;
+        }
+
+        if (entity->type != EntityType::LaserRedHorizontal)
+        {
+            continue;
+        }
+
+        float x, y;
+        x = entity->sprite.getPosition().x;
+        y = entity->sprite.getPosition().y;
+        x -= 0.5f;
+
+        if (x <= 0)
+        {
+            EntityManager::deleteEntity(entity);
+            //entity->enabled = false;
+            isEnnemyFiring = false;
+            return;
+        }
+        else
+        {
+            entity->sprite.setPosition(x, y);
+        }
+
+    }
+}
+
+void Game::HandleCollisionEnnemyLaserPlayer()
+{
+    //
+    //  Handle Collisions between ennemies laser and player
+    //
+
+    for (std::shared_ptr<Entity> entity : EntityManager::entities)
+    {
+        if (entity->enabled == false)
+        {
+            continue;
+        }
+
+        if (entity->type != EntityType::LaserRedHorizontal)
+        {
+            continue;
+        }
+
+        sf::FloatRect laserBound;
+        laserBound = entity->sprite.getGlobalBounds();
+
+        sf::FloatRect boundPlayer;
+        boundPlayer = EntityManager::GetPlayer()->sprite.getGlobalBounds();
+
+        if (laserBound.intersects(boundPlayer) == true)
+        {
+            EntityManager::deleteEntity(entity);
+            isEnnemyFiring = false;
+            pLives--;
+            //break;
+            goto end;
+        }
+    }
+
+end:
+    //nop
+    return;
 }
 
 void Game::handlePlayerMove() {
