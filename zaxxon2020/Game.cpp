@@ -444,8 +444,8 @@ void Game::HandleEnnemyFiring()
             continue;
         }
 
-        int r = rand() % 20;
-        if (r != 10)
+        int r = rand() % 100;
+        if (r >= 11)
             continue;
 
         sf::Vector2f firePos = sf::Vector2f(entity->sprite.getPosition().x-20, entity->sprite.getPosition().y);

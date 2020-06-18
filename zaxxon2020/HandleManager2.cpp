@@ -35,7 +35,7 @@ void HandleManager::HandleBackgroundMovement(shared_ptr<Entity> background, cons
 {
 
     sf::Vector2f postions = background->sprite.getPosition();
-    postions.x -= 3;
+    postions.x -= 1;
     background->sprite.setPosition(postions);
 
    if (postions.x + background->size.x < 0)
