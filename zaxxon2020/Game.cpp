@@ -187,11 +187,11 @@ void Game::update(sf::Time elapsedTime)
         }
         else if (entity->type == EntityType::EnnemyAlphaHorizontalLeft)
         {
-            handleEnemiesMovement(entity, elapsedTime, MovementType::HorizontalBackAndForth, 950);
+            handleEnemiesMovement(entity, elapsedTime, MovementType::HorizontalBackAndForth, 450);
         }
         else if (entity->type == EntityType::EnnemyBetaHorizontalLeft)
         {
-            handleEnemiesMovement(entity, elapsedTime, MovementType::Circle, 5);
+            handleEnemiesMovement(entity, elapsedTime, MovementType::VerticalBackAndForth, 150);
         }
         else if (entity->type == EntityType::EnnemyBoss)
         {
