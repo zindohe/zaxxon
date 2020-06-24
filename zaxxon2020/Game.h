@@ -27,6 +27,7 @@ class Game
 
 		void HandleGameOver();
 		void GameOver();
+		void GameFinished();
 		void HandleTexts();
 		void HandleCollisionPlayerEnnemy();
 		void HandleCollisionPlayerLaserEnnemy();

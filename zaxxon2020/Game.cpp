@@ -154,6 +154,10 @@ void Game::handlePlayerActions(sf::Keyboard::Key key, bool isPressed)
         ResetGame();
     }
 
+    if (key == sf::Keyboard::C) { // TODO : remove this cheat code before exam
+        pLives++;
+    }
+
     if (key == sf::Keyboard::Up)
         isUpPressed = isPressed;
     else if (key == sf::Keyboard::Down)
@@ -167,7 +171,7 @@ void Game::handlePlayerActions(sf::Keyboard::Key key, bool isPressed)
         if ( !isPressed ) {
             isSpacePressed = false;
         }
-        else  if (isPressed && isSpacePressed == false){
+        else  if (isPressed && isSpacePressed == false && gameOver == false){
             isSpacePressed = true;
             Action::PlayerFireLaser();
         }
@@ -180,8 +184,14 @@ void Game::update(sf::Time elapsedTime)
     if (gameOver == true)
         return;
 
+    if (EntityManager::entities.at(0)->type == EntityType::Stage9) {
+        GameFinished();
+        return;
+    }
+
     HandleManager::HandleBackgroundMovement(EntityManager::entities.at(0), mainWindow.getSize());
     HandleManager::HandleBackgroundMovement(EntityManager::entities.at(1), mainWindow.getSize());
+    
     for (std::shared_ptr<Entity> entity : EntityManager::entities)
     {
         if (entity->enabled == false)
@@ -416,6 +426,19 @@ void Game::ResetGame()
     EntityManager::deleteAll();
     initSprite();
     render();
+}
+
+void Game::GameFinished()
+{
+    gameOverText.setFillColor(sf::Color::Green);
+    gameOverText.setFont(sansationFont);
+    gameOverText.setStyle(sf::Text::Bold);
+    gameOverText.setPosition(180.f, 350.f);
+    gameOverText.setCharacterSize(50);
+
+    gameOverText.setString("Congratulation you finished the game\n\t\t\t\tHit R to restart");
+
+    gameOver = true;
 }
 
 void Game::HandleEnnemyFiring()
