@@ -15,6 +15,7 @@ class Game
 		void initSprite();
 		void update(sf::Time elapsedTime);
 		void processEvents();
+		void ResetGame();
 
 		void updateHandleManagement(sf::Time elapsedTime);
 		void handlePlayerMove();

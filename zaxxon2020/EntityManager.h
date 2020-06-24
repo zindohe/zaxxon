@@ -14,6 +14,7 @@ class EntityManager
 		static bool isEnnemy(shared_ptr<Entity> entity);
 		static shared_ptr<Entity> GetPlayerLaser();
 		static void deleteEntity(shared_ptr<Entity> entity);
+		static void deleteAll();
 };
 
 

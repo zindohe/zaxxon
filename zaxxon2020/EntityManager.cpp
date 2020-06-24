@@ -89,3 +89,8 @@ void EntityManager::DeleteAllEnnemies()
 
 }
 
+void EntityManager::deleteAll()
+{
+	EntityManager::entities.clear();
+}
+

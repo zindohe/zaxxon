@@ -147,8 +147,11 @@ void Game::render() {
 void Game::handlePlayerActions(sf::Keyboard::Key key, bool isPressed)
 {
     if (key == sf::Keyboard::Q) {
-        printf("q pressed");
         mainWindow.close();
+    }
+
+    if (key == sf::Keyboard::R) {
+        ResetGame();
     }
 
     if (key == sf::Keyboard::Up)
@@ -384,11 +387,6 @@ void Game::HandleCollisionPlayerLaserEnnemy()
 
 void Game::HandleGameOver()
 {
-   if (EntityManager::GetPlayer()->enabled == false)
-    {
-        GameOver();
-    }
-
     if (pLives == 0)
     {
         GameOver();
@@ -409,6 +407,15 @@ void Game::GameOver()
 
         gameOver = true;
     }
+}
+
+void Game::ResetGame()
+{
+    gameOver = false;
+    gameOverText.setString("");
+    EntityManager::deleteAll();
+    initSprite();
+    render();
 }
 
 void Game::HandleEnnemyFiring()
