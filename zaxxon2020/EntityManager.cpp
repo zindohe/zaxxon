@@ -74,18 +74,36 @@ void EntityManager::DeleteAllEnnemies()
     for (auto iterator = EntityManager::entities.begin(); iterator != EntityManager::entities.end(); iterator++)
     {
 		shared_ptr<Entity> entity = *iterator;
-        if (entity->type == EntityType::EnnemyAlphaHorizontalLeft ||
-			entity->type == EntityType::EnnemyBetaHorizontalLeft ||
-			entity->type == EntityType::EnnemyBoss )
-        {
+		if (entity != nullptr) {
+			if (entity->type == EntityType::EnnemyAlphaHorizontalLeft ||
+				entity->type == EntityType::EnnemyBetaHorizontalLeft ||
+				entity->type == EntityType::EnnemyBoss)
+			{
 
-			entity->enabled = false;
-			iterator--;
-			EntityManager::entities.erase(iterator + 1);
-        }
+				entity->enabled = false;
+				iterator--;
+				EntityManager::entities.erase(iterator + 1);
+			}
+		}
     }
 
 	cout << "vector entities size after : " << EntityManager::entities.size() << endl;
 
+}
+
+void EntityManager::deleteAll()
+{
+	EntityManager::entities.clear();
+}
+
+void EntityManager::deleteEnemyLaser()
+{
+	for (int i = 0; i < EntityManager::entities.size(); i++) {
+		if (EntityManager::entities[i]->type == EntityType::LaserRedHorizontal)
+		{
+			EntityManager::entities.erase(EntityManager::entities.begin() + i);
+			return;
+		}
+	}
 }
 

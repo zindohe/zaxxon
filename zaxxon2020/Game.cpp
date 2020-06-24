@@ -147,8 +147,15 @@ void Game::render() {
 void Game::handlePlayerActions(sf::Keyboard::Key key, bool isPressed)
 {
     if (key == sf::Keyboard::Q) {
-        printf("q pressed");
         mainWindow.close();
+    }
+
+    if (key == sf::Keyboard::R) {
+        ResetGame();
+    }
+
+    if (key == sf::Keyboard::C) { // TODO : remove this cheat code before exam
+        pLives++;
     }
 
     if (key == sf::Keyboard::Up)
@@ -164,7 +171,7 @@ void Game::handlePlayerActions(sf::Keyboard::Key key, bool isPressed)
         if ( !isPressed ) {
             isSpacePressed = false;
         }
-        else  if (isPressed && isSpacePressed == false){
+        else  if (isPressed && isSpacePressed == false && gameOver == false){
             isSpacePressed = true;
             Action::PlayerFireLaser();
         }
@@ -177,8 +184,14 @@ void Game::update(sf::Time elapsedTime)
     if (gameOver == true)
         return;
 
+    if (EntityManager::entities.at(0)->type == EntityType::Stage9) {
+        GameFinished();
+        return;
+    }
+
     HandleManager::HandleBackgroundMovement(EntityManager::entities.at(0), mainWindow.getSize());
     HandleManager::HandleBackgroundMovement(EntityManager::entities.at(1), mainWindow.getSize());
+    
     for (std::shared_ptr<Entity> entity : EntityManager::entities)
     {
         if (entity->enabled == false)
@@ -384,11 +397,6 @@ void Game::HandleCollisionPlayerLaserEnnemy()
 
 void Game::HandleGameOver()
 {
-   if (EntityManager::GetPlayer()->enabled == false)
-    {
-        GameOver();
-    }
-
     if (pLives == 0)
     {
         GameOver();
@@ -409,6 +417,28 @@ void Game::GameOver()
 
         gameOver = true;
     }
+}
+
+void Game::ResetGame()
+{
+    gameOver = false;
+    gameOverText.setString("");
+    EntityManager::deleteAll();
+    initSprite();
+    render();
+}
+
+void Game::GameFinished()
+{
+    gameOverText.setFillColor(sf::Color::Green);
+    gameOverText.setFont(sansationFont);
+    gameOverText.setStyle(sf::Text::Bold);
+    gameOverText.setPosition(180.f, 350.f);
+    gameOverText.setCharacterSize(50);
+
+    gameOverText.setString("Congratulation you finished the game\n\t\t\t\tHit R to restart");
+
+    gameOver = true;
 }
 
 void Game::HandleEnnemyFiring()

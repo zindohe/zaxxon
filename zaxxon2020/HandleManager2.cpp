@@ -33,12 +33,11 @@ void HandleManager::HandlePlayerLaserMove(const float windowWidthSize)
 
 void HandleManager::HandleBackgroundMovement(shared_ptr<Entity> background, const sf::Vector2u mainWindowSize)
 {
+    sf::Vector2f positions = background->sprite.getPosition();
+    positions.x -= 1;
+    background->sprite.setPosition(positions);
 
-    sf::Vector2f postions = background->sprite.getPosition();
-    postions.x -= 1;
-    background->sprite.setPosition(postions);
-
-   if (postions.x + background->size.x < 0)
+   if (positions.x + background->size.x < 0)
     {
         cout << "Size Before: " << EntityManager::entities.size() << endl;
         ChangeToNextStage();
@@ -124,7 +123,9 @@ void HandleManager::SpawnEnnemies(const sf::Vector2u mainWindowSize)
             EnnemiesStage8(mainWindowSize);
             break;
         case EntityType::Stage9:
-            EnnemiesStage9(mainWindowSize);
+            EntityManager::DeleteAllEnnemies();
+            EntityManager::deleteEnemyLaser();
+            //EnnemiesStage9(mainWindowSize);
             break;
     }
 
