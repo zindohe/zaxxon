@@ -5,14 +5,29 @@
 #include "EntityFactory.h"
 
 float Action::PlayerSpeed = 10.f;
+bool Action::isSuperLaserActive = false;
 
 void Action::PlayerFireLaser() {
 	shared_ptr<Entity> player = EntityManager::GetPlayer();
 
 	int position_x = player->sprite.getPosition().x + player->sprite.getTexture()->getSize().x;
 	int position_y = player->sprite.getPosition().y - (player->sprite.getTexture()->getSize().y / 2);
+	int player_size = player->sprite.getTexture()->getSize().y;
 
 	shared_ptr<Entity> playerLaser = EntityFactory::createEntity(EntityType::PlayerLaser, sf::Vector2f(position_x, position_y), true);
+	
+	if (isSuperLaserActive) {
+		shared_ptr<Entity> playerSuperLaserDown = EntityFactory::createEntity(EntityType::PlayerSuperLaserDown, sf::Vector2f(position_x + 50, position_y - player_size), true);
+		shared_ptr<Entity> playerSuperLaserUp = EntityFactory::createEntity(EntityType::PlayerSuperLaserUp, sf::Vector2f(position_x, position_y + player_size), true);
+		
+		playerSuperLaserDown->sprite.setRotation(45);
+		playerSuperLaserUp->sprite.setRotation(-45);
+
+		EntityManager::entities.push_back(playerSuperLaserDown);
+		EntityManager::entities.push_back(playerSuperLaserUp);
+	}
+	
+
 	EntityManager::entities.push_back(playerLaser);
 }
 

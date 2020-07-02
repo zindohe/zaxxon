@@ -20,7 +20,7 @@ void Spawner::LinearStrategy(sf::Vector2u mainWindowSize, EntityType type, int n
     }
 }
 
-void Spawner::DefaultStrategy(sf::Vector2u mainWindowSize, EntityType type, sf::Vector2f first_positions)
+void Spawner::DefaultStrategy(EntityType type, sf::Vector2f first_positions)
 {
     shared_ptr<Entity> entity = EntityFactory::createEntity(type, first_positions, true);
 

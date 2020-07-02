@@ -22,6 +22,9 @@ map<EntityType, string> EntityFactory::textureFiles = {
 												{EntityType::Delimiter, "sprites/delimiter.png"},
 												{EntityType::BlueBonus, "sprites/laser_cyan_vertical.png"},
 												{EntityType::GreenBonus, "sprites/green_bonus2.png"},
+												{EntityType::YellowBonus, "sprites/yellow_bonus.png"},
+												{EntityType::PlayerSuperLaserDown, "sprites/laser_blue_horizontal.png"},
+												{EntityType::PlayerSuperLaserUp, "sprites/laser_blue_horizontal.png"},
 												};
 
 map<EntityType, shared_ptr<sf::Texture>> EntityFactory::textures;

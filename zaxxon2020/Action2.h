@@ -19,5 +19,6 @@ public:
 	static void PlayerUpMove();
 	static void PlayerDownMove(const float windowHeightSize);
 	static float PlayerSpeed;
+	static bool isSuperLaserActive;
 };
 

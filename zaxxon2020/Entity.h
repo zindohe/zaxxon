@@ -15,6 +15,8 @@ enum EntityType
 	Player,
 	Sbire,
 	PlayerLaser,
+	PlayerSuperLaserDown,
+	PlayerSuperLaserUp,
 	LaserBlueHorizontal,
 	LaserRedHorizontal,
 	EnnemyAlphaHorizontalLeft,
@@ -24,6 +26,7 @@ enum EntityType
 
 	BlueBonus,
 	GreenBonus,
+	YellowBonus,
 
 	None
 };

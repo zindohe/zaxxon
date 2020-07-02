@@ -381,6 +381,9 @@ void Game::HandleCollisionPlayerLaserEnnemy()
         ennemyBound = entity->sprite.getGlobalBounds();
 
         std::shared_ptr<Entity> laser = EntityManager::GetPlayerLaser();
+        std::shared_ptr<Entity> superLaserDown = EntityManager::GetPlayerSuperLaserDown();
+        std::shared_ptr<Entity> superLaserUp = EntityManager::GetPlayerSuperLaserUp();
+
         if (laser == nullptr || laser->enabled == false)
         {
             return;
@@ -390,9 +393,33 @@ void Game::HandleCollisionPlayerLaserEnnemy()
         if (ennemyBound.intersects(boundLaser) == true)
         {
             EntityManager::deleteEntity(entity);
-            EntityManager::deleteEntity(laser);
+            //EntityManager::deleteEntity(laser);
             pScore++;
             break;
+        }
+
+        if (superLaserDown != nullptr && superLaserDown->enabled == true) {
+
+            sf::FloatRect boundSuperLaserDown = superLaserDown->sprite.getGlobalBounds();
+            if (ennemyBound.intersects(boundSuperLaserDown) == true)
+            {
+                EntityManager::deleteEntity(entity);
+                //EntityManager::deleteEntity(boundSuperLaserDown);
+                pScore++;
+                break;
+            }
+        }
+
+        if (superLaserUp != nullptr && superLaserUp->enabled == true) {
+
+            sf::FloatRect boundSuperLaserUp = superLaserUp->sprite.getGlobalBounds();
+            if (ennemyBound.intersects(boundSuperLaserUp) == true)
+            {
+                EntityManager::deleteEntity(entity);
+                //EntityManager::deleteEntity(boundSuperLaserDown);
+                pScore++;
+                break;
+            }
         }
     }
 }
@@ -570,8 +597,7 @@ void Game::HandleCollisionPlayerBonus()
             continue;
         }
 
-        if (entity->type != EntityType::BlueBonus &&
-            entity->type != EntityType::GreenBonus)
+        if (!EntityManager::isBonus(entity))
         {
             continue;
         }
@@ -588,9 +614,11 @@ void Game::HandleCollisionPlayerBonus()
             switch (entity->type)
             {
             case EntityType::BlueBonus:
-                Action::PlayerSpeed += 10.f;
+                Action::PlayerSpeed = 20.f;
             case EntityType::GreenBonus:
                 pLives = 4;
+            case EntityType::YellowBonus:
+                Action::isSuperLaserActive = true;
             default:
                 break;
             }

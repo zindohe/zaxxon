@@ -11,12 +11,24 @@ void HandleManager::HandlePlayerLaserMove(const float windowWidthSize)
         
    for (auto iterator = EntityManager::entities.begin(); iterator != EntityManager::entities.end(); iterator++ )
     {
-        if ((*iterator)->type != EntityType::PlayerLaser)
+        if ((*iterator)->type != EntityType::PlayerLaser &&
+            (*iterator)->type != EntityType::PlayerSuperLaserDown &&
+            (*iterator)->type != EntityType::PlayerSuperLaserUp)
         {
             continue;
         }
         sf::Vector2f position = (*iterator)->sprite.getPosition();
-        position.x += 1;
+        if ((*iterator)->type == EntityType::PlayerLaser) {
+            position.x += 1;
+        }
+        else if ((*iterator)->type != EntityType::PlayerSuperLaserDown) {
+            position.x += 1;
+            position.y -= 1;
+        }
+        else if ((*iterator)->type != EntityType::PlayerSuperLaserUp) {
+            position.x += 1;
+            position.y += 1;
+        }
 
         if (position.x > windowWidthSize)
         {
@@ -140,10 +152,7 @@ void HandleManager::EnnemiesStage1(const sf::Vector2u mainWindowSize)
     //Ennemies Alpha
     
     Spawner::LinearStrategy(mainWindowSize, EntityType::EnnemyAlphaHorizontalLeft, 4, sf::Vector2f(700.f, 0.f));
-    
-    //Health Bonus
 
-    Spawner::DefaultStrategy(mainWindowSize, EntityType::GreenBonus, sf::Vector2f(900.f, 0.f));
 }
 
 void HandleManager::EnnemiesStage2(const sf::Vector2u mainWindowSize)
@@ -157,10 +166,6 @@ void HandleManager::EnnemiesStage2(const sf::Vector2u mainWindowSize)
     //Ennemies Beta
 
     Spawner::LinearStrategy(mainWindowSize, EntityType::EnnemyBetaHorizontalLeft, 2, sf::Vector2f(800.f, 0.f));
-
-    //Speed Bonus
-
-    Spawner::DefaultStrategy(mainWindowSize, EntityType::BlueBonus, sf::Vector2f(900.f, 0.f));
 
 }
 
