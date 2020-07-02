@@ -18,16 +18,27 @@ void HandleManager::HandlePlayerLaserMove(const float windowWidthSize)
             continue;
         }
         sf::Vector2f position = (*iterator)->sprite.getPosition();
+        sf::Vector2f movement(0.f, 0.f);
+
         if ((*iterator)->type == EntityType::PlayerLaser) {
             position.x += 1;
+
+            movement.x = 1;
         }
         else if ((*iterator)->type != EntityType::PlayerSuperLaserDown) {
             position.x += 1;
             position.y -= 1;
+
+            movement.x = 1;
+            movement.y = -1;
+
         }
         else if ((*iterator)->type != EntityType::PlayerSuperLaserUp) {
             position.x += 1;
             position.y += 1;
+
+            movement.x = 1;
+            movement.y = 1;
         }
 
         if (position.x > windowWidthSize)
@@ -38,7 +49,8 @@ void HandleManager::HandlePlayerLaserMove(const float windowWidthSize)
             continue;
         }
 
-        (*iterator)->sprite.setPosition(position);
+        (*iterator)->sprite.move(movement);
+        //(*iterator)->sprite.setPosition(position);
 
     }
 }

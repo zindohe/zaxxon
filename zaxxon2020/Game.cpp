@@ -154,9 +154,14 @@ void Game::handlePlayerActions(sf::Keyboard::Key key, bool isPressed)
         ResetGame();
     }
 
+    // CHEAT CODES
+
     if (key == sf::Keyboard::C) { // TODO : remove this cheat code before exam
         pLives++;
+        Action::isSuperLaserActive = true;
     }
+
+    // END CHEAT CODES
 
     if (key == sf::Keyboard::Up)
         isUpPressed = isPressed;
@@ -615,10 +620,13 @@ void Game::HandleCollisionPlayerBonus()
             {
             case EntityType::BlueBonus:
                 Action::PlayerSpeed = 20.f;
+                break;
             case EntityType::GreenBonus:
                 pLives = 4;
+                break;
             case EntityType::YellowBonus:
                 Action::isSuperLaserActive = true;
+                break;
             default:
                 break;
             }
