@@ -46,7 +46,7 @@ void Game::initSprite() {
     EntityManager::entities.push_back(stage1);
     EntityManager::entities.push_back(stage2);
 
-    shared_ptr<Entity> player = EntityFactory::createEntity(EntityType::Player, sf::Vector2f(100.f, 100.f), true);
+    shared_ptr<Entity> player = EntityFactory::createEntity(EntityType::Player, sf::Vector2f(50.f, 200.f), true);
 
     EntityManager::entities.push_back(player);
 
@@ -154,9 +154,14 @@ void Game::handlePlayerActions(sf::Keyboard::Key key, bool isPressed)
         ResetGame();
     }
 
+    // CHEAT CODES
+
     if (key == sf::Keyboard::C) { // TODO : remove this cheat code before exam
         pLives++;
+        Action::isSuperLaserActive = true;
     }
+
+    // END CHEAT CODES
 
     if (key == sf::Keyboard::Up)
         isUpPressed = isPressed;
@@ -317,6 +322,7 @@ void Game::updateHandleManagement(sf::Time elapsedTime)
         HandleEnnemyFiring();
         HandleEnnemyLasersMovement();
         HandleCollisionEnnemyLaserPlayer();
+        HandleCollisionPlayerBonus();
     }
 }
 
@@ -380,6 +386,9 @@ void Game::HandleCollisionPlayerLaserEnnemy()
         ennemyBound = entity->sprite.getGlobalBounds();
 
         std::shared_ptr<Entity> laser = EntityManager::GetPlayerLaser();
+        std::shared_ptr<Entity> superLaserDown = EntityManager::GetPlayerSuperLaserDown();
+        std::shared_ptr<Entity> superLaserUp = EntityManager::GetPlayerSuperLaserUp();
+
         if (laser == nullptr || laser->enabled == false)
         {
             return;
@@ -389,8 +398,33 @@ void Game::HandleCollisionPlayerLaserEnnemy()
         if (ennemyBound.intersects(boundLaser) == true)
         {
             EntityManager::deleteEntity(entity);
+            //EntityManager::deleteEntity(laser);
             pScore++;
             break;
+        }
+
+        if (superLaserDown != nullptr && superLaserDown->enabled == true) {
+
+            sf::FloatRect boundSuperLaserDown = superLaserDown->sprite.getGlobalBounds();
+            if (ennemyBound.intersects(boundSuperLaserDown) == true)
+            {
+                EntityManager::deleteEntity(entity);
+                //EntityManager::deleteEntity(boundSuperLaserDown);
+                pScore++;
+                break;
+            }
+        }
+
+        if (superLaserUp != nullptr && superLaserUp->enabled == true) {
+
+            sf::FloatRect boundSuperLaserUp = superLaserUp->sprite.getGlobalBounds();
+            if (ennemyBound.intersects(boundSuperLaserUp) == true)
+            {
+                EntityManager::deleteEntity(entity);
+                //EntityManager::deleteEntity(boundSuperLaserDown);
+                pScore++;
+                break;
+            }
         }
     }
 }
@@ -550,6 +584,52 @@ void Game::HandleCollisionEnnemyLaserPlayer()
             EntityManager::deleteEntity(entity);
             isEnnemyFiring = false;
             pLives--;
+            break;
+        }
+    }
+}
+
+void Game::HandleCollisionPlayerBonus()
+{
+    //
+    //  Handle Collisions between player and the blue bonus
+    //
+
+    for (std::shared_ptr<Entity> entity : EntityManager::entities)
+    {
+        if (entity->enabled == false)
+        {
+            continue;
+        }
+
+        if (!EntityManager::isBonus(entity))
+        {
+            continue;
+        }
+
+        sf::FloatRect bonusBound;
+        bonusBound = entity->sprite.getGlobalBounds();
+
+        sf::FloatRect boundPlayer;
+        boundPlayer = EntityManager::GetPlayer()->sprite.getGlobalBounds();
+
+        if (bonusBound.intersects(boundPlayer) == true)
+        {
+            EntityManager::deleteEntity(entity);
+            switch (entity->type)
+            {
+            case EntityType::BlueBonus:
+                Action::PlayerSpeed = 20.f;
+                break;
+            case EntityType::GreenBonus:
+                pLives = 4;
+                break;
+            case EntityType::YellowBonus:
+                Action::isSuperLaserActive = true;
+                break;
+            default:
+                break;
+            }
             break;
         }
     }

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "EntityFactory.h"
 
-map<EntityType, string> EntityFactory::textureFiles = { 
+map<EntityType, string> EntityFactory::textureFiles = {
 												{EntityType::Stage1, "sprites/stage1.jpg"},
 												{EntityType::Stage2, "sprites/stage2.png"},
 												{EntityType::Stage3, "sprites/stage3.png"},
@@ -19,7 +19,12 @@ map<EntityType, string> EntityFactory::textureFiles = {
 												{EntityType::EnnemyAlphaHorizontalLeft, "sprites/ennemiy_alpha_horizontal_left.png"},
 												{EntityType::EnnemyBetaHorizontalLeft, "sprites/ennemy_beta_horizontal_left.png"},
 												{EntityType::EnnemyBoss, "sprites/ennemy_insect.png"},
-												{EntityType::Delimiter, "sprites/delimiter.png"}
+												{EntityType::Delimiter, "sprites/delimiter.png"},
+												{EntityType::BlueBonus, "sprites/laser_cyan_vertical.png"},
+												{EntityType::GreenBonus, "sprites/green_bonus2.png"},
+												{EntityType::YellowBonus, "sprites/yellow_bonus.png"},
+												{EntityType::PlayerSuperLaserDown, "sprites/laser_blue_horizontal.png"},
+												{EntityType::PlayerSuperLaserUp, "sprites/laser_blue_horizontal.png"},
 												};
 
 map<EntityType, shared_ptr<sf::Texture>> EntityFactory::textures;

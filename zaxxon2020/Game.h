@@ -34,6 +34,7 @@ class Game
 		void HandleEnnemyFiring();
 		void HandleEnnemyLasersMovement();
 		void HandleCollisionEnnemyLaserPlayer();
+		void HandleCollisionPlayerBonus();
 
 
 		void verticalBackAndForthMovement(std::shared_ptr<Entity> entity, sf::Time elapsedTime, int movementSize);
