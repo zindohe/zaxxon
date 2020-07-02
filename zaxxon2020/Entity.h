@@ -22,6 +22,9 @@ enum EntityType
 	EnnemyBoss,
 	Delimiter,
 
+	BlueBonus,
+	GreenBonus,
+
 	None
 };
 

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "EntityManager.h"
+#include "Action2.h"
 
 vector<shared_ptr<Entity>> EntityManager::entities;
 
@@ -77,7 +78,9 @@ void EntityManager::DeleteAllEnnemies()
 		if (entity != nullptr) {
 			if (entity->type == EntityType::EnnemyAlphaHorizontalLeft ||
 				entity->type == EntityType::EnnemyBetaHorizontalLeft ||
-				entity->type == EntityType::EnnemyBoss)
+				entity->type == EntityType::EnnemyBoss ||
+				entity->type == EntityType::BlueBonus ||
+				entity->type == EntityType::GreenBonus)
 			{
 
 				entity->enabled = false;
@@ -86,6 +89,10 @@ void EntityManager::DeleteAllEnnemies()
 			}
 		}
     }
+
+	// Reset Stage's bonuses
+
+	Action::PlayerSpeed = 10.f;
 
 	cout << "vector entities size after : " << EntityManager::entities.size() << endl;
 

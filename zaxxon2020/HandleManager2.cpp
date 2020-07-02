@@ -140,7 +140,10 @@ void HandleManager::EnnemiesStage1(const sf::Vector2u mainWindowSize)
     //Ennemies Alpha
     
     Spawner::LinearStrategy(mainWindowSize, EntityType::EnnemyAlphaHorizontalLeft, 4, sf::Vector2f(700.f, 0.f));
+    
+    //Health Bonus
 
+    Spawner::DefaultStrategy(mainWindowSize, EntityType::GreenBonus, sf::Vector2f(900.f, 0.f));
 }
 
 void HandleManager::EnnemiesStage2(const sf::Vector2u mainWindowSize)
@@ -154,6 +157,10 @@ void HandleManager::EnnemiesStage2(const sf::Vector2u mainWindowSize)
     //Ennemies Beta
 
     Spawner::LinearStrategy(mainWindowSize, EntityType::EnnemyBetaHorizontalLeft, 2, sf::Vector2f(800.f, 0.f));
+
+    //Speed Bonus
+
+    Spawner::DefaultStrategy(mainWindowSize, EntityType::BlueBonus, sf::Vector2f(900.f, 0.f));
 
 }
 

@@ -46,7 +46,7 @@ void Game::initSprite() {
     EntityManager::entities.push_back(stage1);
     EntityManager::entities.push_back(stage2);
 
-    shared_ptr<Entity> player = EntityFactory::createEntity(EntityType::Player, sf::Vector2f(100.f, 100.f), true);
+    shared_ptr<Entity> player = EntityFactory::createEntity(EntityType::Player, sf::Vector2f(50.f, 200.f), true);
 
     EntityManager::entities.push_back(player);
 
@@ -317,6 +317,7 @@ void Game::updateHandleManagement(sf::Time elapsedTime)
         HandleEnnemyFiring();
         HandleEnnemyLasersMovement();
         HandleCollisionEnnemyLaserPlayer();
+        HandleCollisionPlayerBonus();
     }
 }
 
@@ -389,6 +390,7 @@ void Game::HandleCollisionPlayerLaserEnnemy()
         if (ennemyBound.intersects(boundLaser) == true)
         {
             EntityManager::deleteEntity(entity);
+            EntityManager::deleteEntity(laser);
             pScore++;
             break;
         }
@@ -550,6 +552,48 @@ void Game::HandleCollisionEnnemyLaserPlayer()
             EntityManager::deleteEntity(entity);
             isEnnemyFiring = false;
             pLives--;
+            break;
+        }
+    }
+}
+
+void Game::HandleCollisionPlayerBonus()
+{
+    //
+    //  Handle Collisions between player and the blue bonus
+    //
+
+    for (std::shared_ptr<Entity> entity : EntityManager::entities)
+    {
+        if (entity->enabled == false)
+        {
+            continue;
+        }
+
+        if (entity->type != EntityType::BlueBonus &&
+            entity->type != EntityType::GreenBonus)
+        {
+            continue;
+        }
+
+        sf::FloatRect bonusBound;
+        bonusBound = entity->sprite.getGlobalBounds();
+
+        sf::FloatRect boundPlayer;
+        boundPlayer = EntityManager::GetPlayer()->sprite.getGlobalBounds();
+
+        if (bonusBound.intersects(boundPlayer) == true)
+        {
+            EntityManager::deleteEntity(entity);
+            switch (entity->type)
+            {
+            case EntityType::BlueBonus:
+                Action::PlayerSpeed += 10.f;
+            case EntityType::GreenBonus:
+                pLives = 4;
+            default:
+                break;
+            }
             break;
         }
     }

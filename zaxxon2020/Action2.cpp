@@ -4,7 +4,7 @@
 #include "EntityManager.h"
 #include "EntityFactory.h"
 
-const float Action::PlayerSpeed = 10.f;
+float Action::PlayerSpeed = 10.f;
 
 void Action::PlayerFireLaser() {
 	shared_ptr<Entity> player = EntityManager::GetPlayer();

@@ -18,8 +18,6 @@ public:
 	static void PlayerRightMove(const float windowWidthSize);
 	static void PlayerUpMove();
 	static void PlayerDownMove(const float windowHeightSize);
-
-private:
-	static const float PlayerSpeed;
+	static float PlayerSpeed;
 };
 
