@@ -5,6 +5,7 @@
 #include "EntityFactory.h"
 #include "Action2.h"
 #include "HandleManager2.h"
+#include "ScoreRegister.h"
 
 const float Game::PlayerSpeed = 10.f;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
@@ -464,13 +465,26 @@ void Game::ResetGame()
 
 void Game::GameFinished()
 {
+    string message = "Congratulation you finished the game\n\t\t\t\tHit R to restart\n\n\n\t\t\tYour username is ";
+    string player_username = ScoreRegister::getRandomUsername();
+    ScoreRegister::registerScore(player_username, pScore);
+
+    string results = "\n\t\t\t\tScoreboard\n\t\t____________________________\n";
+    vector<string> scores = ScoreRegister::readScores();
+
+    for (auto& score : scores)
+    {
+        results += "\t\t||\t\t\t" + score.substr(0, 3) + "\t\t\t\t||\t\t\t\t" + score.substr(4, score.length()-1) + "\t\t\t||\n";
+    }
+
+
     gameOverText.setFillColor(sf::Color::Green);
     gameOverText.setFont(sansationFont);
     gameOverText.setStyle(sf::Text::Bold);
-    gameOverText.setPosition(180.f, 350.f);
-    gameOverText.setCharacterSize(50);
+    gameOverText.setPosition(200.f, 150.f);
+    gameOverText.setCharacterSize(40);
 
-    gameOverText.setString("Congratulation you finished the game\n\t\t\t\tHit R to restart");
+    gameOverText.setString(message + player_username + results);
 
     gameOver = true;
 }
