@@ -465,6 +465,7 @@ void Game::ResetGame()
 
 void Game::GameFinished()
 {
+    int score_number = 0;
     string message = "Congratulation you finished the game\n\t\t\t\tHit R to restart\n\n\n\t\t\tYour username is ";
     string player_username = ScoreRegister::getRandomUsername();
     ScoreRegister::registerScore(player_username, pScore);
@@ -475,6 +476,10 @@ void Game::GameFinished()
     for (auto& score : scores)
     {
         results += "||\t\t\t" + score.substr(0, 3) + "\t\t\t\t||\t\t\t\t" + score.substr(4, score.length()-1) + "\t\t\t||\n";
+        score_number++;
+        if (score_number > 8) {
+            break;
+        }
     }
 
 

@@ -23,14 +23,9 @@ vector<string> ScoreRegister::readScores()
 	scoreFile.open("data/scores");
 	vector<string> scores;
 	string score;
-	int score_number = 0;
 
 	while (getline(scoreFile, score)) {
 		scores.push_back(score);
-		score_number++;
-		if (score_number > 8) {
-			break;
-		}
 	}
 
 	sort(scores.begin(), scores.end(), compareScore);
