@@ -16,7 +16,7 @@
 #include <vector>
 #include <algorithm>
 #include <map>
-
+#include <fstream>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
