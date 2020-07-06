@@ -445,10 +445,10 @@ void Game::GameOver()
         gameOverText.setFillColor(sf::Color::Red);
         gameOverText.setFont(sansationFont);
         gameOverText.setStyle(sf::Text::Bold);
-        gameOverText.setPosition(350.f, 350.f);
-        gameOverText.setCharacterSize(80);
+        gameOverText.setPosition(150.f, 350.f);
+        gameOverText.setCharacterSize(50);
 
-        gameOverText.setString("GAME OVER");
+        gameOverText.setString("\t\t\t\t\tGAME OVER\nHit R to restart or Q to quit the game");
 
         gameOver = true;
     }
@@ -469,19 +469,19 @@ void Game::GameFinished()
     string player_username = ScoreRegister::getRandomUsername();
     ScoreRegister::registerScore(player_username, pScore);
 
-    string results = "\n\t\t\t\tScoreboard\n\t\t____________________________\n";
+    string results = "\n\t\t\t\t\tScoreboard :\n________________________________\n";
     vector<string> scores = ScoreRegister::readScores();
 
     for (auto& score : scores)
     {
-        results += "\t\t||\t\t\t" + score.substr(0, 3) + "\t\t\t\t||\t\t\t\t" + score.substr(4, score.length()-1) + "\t\t\t||\n";
+        results += "||\t\t\t" + score.substr(0, 3) + "\t\t\t\t||\t\t\t\t" + score.substr(4, score.length()-1) + "\t\t\t||\n";
     }
 
 
     gameOverText.setFillColor(sf::Color::Green);
     gameOverText.setFont(sansationFont);
     gameOverText.setStyle(sf::Text::Bold);
-    gameOverText.setPosition(200.f, 150.f);
+    gameOverText.setPosition(200.f, 70.f);
     gameOverText.setCharacterSize(40);
 
     gameOverText.setString(message + player_username + results);
