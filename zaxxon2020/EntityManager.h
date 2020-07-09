@@ -19,6 +19,7 @@ class EntityManager
 		static void deleteEntity(shared_ptr<Entity> entity);
 		static void deleteAll();
 		static void deleteEnemyLaser();
+		static shared_ptr<Entity> GetEntityByType(EntityType type);
 };
 
 

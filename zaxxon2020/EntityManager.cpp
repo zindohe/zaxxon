@@ -34,6 +34,19 @@ shared_ptr<Entity> EntityManager::GetPlayer()
 	return nullptr;
 }
 
+shared_ptr<Entity> EntityManager::GetEntityByType(EntityType type)
+{
+	for (std::shared_ptr<Entity> entity : EntityManager::entities)
+	{
+		if (entity->type == type)
+		{
+			return entity;
+		}
+	}
+
+	return nullptr;
+}
+
 bool EntityManager::isEnnemy(std::shared_ptr<Entity> entity)
 {
 	if (entity->type == EntityType::EnnemyAlphaHorizontalLeft ||
@@ -140,7 +153,6 @@ void EntityManager::deleteEntity(shared_ptr<Entity> entity)
 
 void EntityManager::DeleteAllEnnemies()
 {
-	cout << "vector entities size before : " << EntityManager::entities.size() << endl;
     for (auto iterator = EntityManager::entities.begin(); iterator != EntityManager::entities.end(); iterator++)
     {
 		shared_ptr<Entity> entity = *iterator;
@@ -160,7 +172,7 @@ void EntityManager::DeleteAllEnnemies()
 	Action::PlayerSpeed = 10.f;
 	Action::isSuperLaserActive = false;
 
-	cout << "vector entities size after : " << EntityManager::entities.size() << endl;
+	GetPlayer()->sprite.setColor(sf::Color(255, 255, 255));
 
 }
 
