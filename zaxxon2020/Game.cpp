@@ -646,6 +646,7 @@ void Game::HandleCollisionPlayerBonus()
             {
             case EntityType::BlueBonus:
                 Action::PlayerSpeed = 20.f;
+                EntityManager::GetPlayer()->sprite.setColor(sf::Color(0, 245, 245));
                 break;
             case EntityType::GreenBonus:
                 pLives = 4;
