@@ -36,6 +36,15 @@ shared_ptr<Entity> EntityFactory::createEntity(EntityType type, const sf::Vector
 	entity->type = type;
 	entity->position = positions;
 	entity->enabled = enabled;
+	if (type == EntityType::EnnemyBoss) {
+		entity->health = 10;
+	}
+	else if (type == EntityType::EnnemyBetaHorizontalLeft) {
+		entity->health = 2;
+	}
+	else {
+		entity->health = 1;
+	}
 
 	shared_ptr<sf::Texture> texture = textures.at(type);
 	sf::Sprite sprite;

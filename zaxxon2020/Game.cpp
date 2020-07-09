@@ -416,10 +416,16 @@ void Game::HandleCollisionPlayerLaserEnnemy()
 
         if (ennemyBound.intersects(boundLaser) == true)
         {
-            EntityManager::deleteEntity(entity);
-            //EntityManager::deleteEntity(laser);
-            pScore++;
-            break;
+            entity->health--;
+            if (entity->health == 0) {
+                EntityManager::deleteEntity(entity);
+                pScore++;
+                break;
+            }
+            else {
+                EntityManager::deleteEntity(laser);
+                break;
+            }
         }
 
         if (superLaserDown != nullptr && superLaserDown->enabled == true) {
@@ -427,10 +433,16 @@ void Game::HandleCollisionPlayerLaserEnnemy()
             sf::FloatRect boundSuperLaserDown = superLaserDown->sprite.getGlobalBounds();
             if (ennemyBound.intersects(boundSuperLaserDown) == true)
             {
-                EntityManager::deleteEntity(entity);
-                //EntityManager::deleteEntity(boundSuperLaserDown);
-                pScore++;
-                break;
+                entity->health--;
+                if (entity->health == 0) {
+                    EntityManager::deleteEntity(entity);
+                    pScore++;
+                    break;
+                }
+                else {
+                    EntityManager::deleteEntity(superLaserDown);
+                    break;
+                }
             }
         }
 
@@ -439,10 +451,16 @@ void Game::HandleCollisionPlayerLaserEnnemy()
             sf::FloatRect boundSuperLaserUp = superLaserUp->sprite.getGlobalBounds();
             if (ennemyBound.intersects(boundSuperLaserUp) == true)
             {
-                EntityManager::deleteEntity(entity);
-                //EntityManager::deleteEntity(boundSuperLaserDown);
-                pScore++;
-                break;
+                entity->health--;
+                if (entity->health == 0) {
+                    EntityManager::deleteEntity(entity);
+                    pScore++;
+                    break;
+                }
+                else {
+                    EntityManager::deleteEntity(superLaserUp);
+                    break;
+                }
             }
         }
     }
