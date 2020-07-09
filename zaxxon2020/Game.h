@@ -16,6 +16,7 @@ class Game
 		void update(sf::Time elapsedTime);
 		void processEvents();
 		void ResetGame();
+		void initSounds();
 
 		void updateHandleManagement(sf::Time elapsedTime);
 		void handlePlayerMove();
@@ -45,7 +46,7 @@ class Game
 
 		sf::RenderWindow mainWindow; // Fenetre Principale ou l'on va poser des elements graphique
 
-		
+		sf::Music mainMusic;
 		static const float		PlayerSpeed;
 		static const sf::Time	TimePerFrame;
 		std::size_t	mStatisticsNumFrames;

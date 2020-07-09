@@ -23,14 +23,19 @@ Game::Game() : mainWindow(sf::VideoMode(1200, 800), "ZAXXON 2020 HD", sf::Style:
                 updateTime()
 {
     if (sansationFont.loadFromFile("Media/Sansation.ttf")) {
-        printf("Font loaded !");
+        printf("Font loaded !\n");
     }
     else {
-        printf("Failed to load font");
+        printf("Failed to load font\n");
+    }
+
+    if (!mainMusic.openFromFile("music/main.ogg")) {
+        cout << "Error while loading music file" << endl;
     }
 
     EntityFactory::loadTextures();
     initSprite();
+    initSounds();
 }
 
 Game::~Game() {
@@ -88,11 +93,17 @@ void Game::initSprite() {
 
 }
 
+void Game::initSounds()
+{
+    mainMusic.play();
+}
+
 
 void Game::run() {
 
     sf::Clock clock;
     sf::Time timeSinceLastUpdate = sf::Time::Zero;
+
     while (mainWindow.isOpen())
     {
         sf::Time elapsedTime = clock.restart();
