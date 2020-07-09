@@ -25,7 +25,8 @@ map<EntityType, string> EntityFactory::textureFiles = {
 												{EntityType::YellowBonus, "sprites/yellow_bonus.png"},
 												{EntityType::PlayerSuperLaserDown, "sprites/laser_blue_horizontal.png"},
 												{EntityType::PlayerSuperLaserUp, "sprites/laser_blue_horizontal.png"},
-												{EntityType::GreenVisualEffect, "sprites/shield5.png"}
+												{EntityType::GreenVisualEffect, "sprites/shield5.png"},
+												{EntityType::EnnemyGamma, "sprites/ennemy_gamma.png"},
 												};
 
 map<EntityType, shared_ptr<sf::Texture>> EntityFactory::textures;
@@ -36,6 +37,15 @@ shared_ptr<Entity> EntityFactory::createEntity(EntityType type, const sf::Vector
 	entity->type = type;
 	entity->position = positions;
 	entity->enabled = enabled;
+	if (type == EntityType::EnnemyBoss) {
+		entity->health = 10;
+	}
+	else if (type == EntityType::EnnemyBetaHorizontalLeft) {
+		entity->health = 2;
+	}
+	else {
+		entity->health = 1;
+	}
 
 	shared_ptr<sf::Texture> texture = textures.at(type);
 	sf::Sprite sprite;

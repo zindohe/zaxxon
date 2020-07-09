@@ -17,10 +17,15 @@
 #include <algorithm>
 #include <map>
 #include <fstream>
+#include <cmath>
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+#include <SFML/System.hpp>
+#include <SFML/Window.hpp>
 #include <SFML/OpenGL.hpp>
 
+#define M_PI 3.14159265358979323846
 #define PI 3.14159265359
 #pragma comment(lib, "sfml-audio-d.lib")
 #pragma comment(lib, "sfml-graphics-d.lib")

@@ -6,6 +6,7 @@
 #include "Action2.h"
 #include "HandleManager2.h"
 #include "ScoreRegister.h"
+#include "Spawner.h"
 
 const float Game::PlayerSpeed = 10.f;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
@@ -23,14 +24,19 @@ Game::Game() : mainWindow(sf::VideoMode(1200, 800), "ZAXXON 2020 HD", sf::Style:
                 updateTime()
 {
     if (sansationFont.loadFromFile("Media/Sansation.ttf")) {
-        printf("Font loaded !");
+        printf("Font loaded !\n");
     }
     else {
-        printf("Failed to load font");
+        printf("Failed to load font\n");
+    }
+
+    if (!mainMusic.openFromFile("music/main.ogg")) {
+        cout << "Error while loading music file" << endl;
     }
 
     EntityFactory::loadTextures();
     initSprite();
+    initSounds();
 }
 
 Game::~Game() {
@@ -88,11 +94,17 @@ void Game::initSprite() {
 
 }
 
+void Game::initSounds()
+{
+    mainMusic.play();
+}
+
 
 void Game::run() {
 
     sf::Clock clock;
     sf::Time timeSinceLastUpdate = sf::Time::Zero;
+
     while (mainWindow.isOpen())
     {
         sf::Time elapsedTime = clock.restart();
@@ -222,10 +234,16 @@ void Game::update(sf::Time elapsedTime)
         {
             handleEnemiesMovement(entity, elapsedTime, MovementType::HorizontalBackAndForth, 50);
         }
+        else if (entity->type == EntityType::EnnemyGamma) {
+            handleEnemiesMovement(entity, elapsedTime, MovementType::Circle, 10.f);
+        }
 
     }
 
-    Game::entities_angle += 50.f;
+    //Game::entities_angle += (5.f * (M_PI/180));
+    if (Game::entities_angle > 360.f)
+        Game::entities_angle = 0.f;
+    Game::entities_angle += 5.f;
     // handle player actions consequences there
     handlePlayerMove();
 
@@ -293,7 +311,9 @@ void Game::horizontalBackAndForthMovement(std::shared_ptr<Entity> entity, sf::Ti
 void Game::circleMovement(std::shared_ptr<Entity> entity, sf::Time elapsedTime, int circleSize)
 {
     // entity->sprite.move(cos(Game::entities_angle) * elapsedTime.asSeconds() * EnemiesSpeed, sin(Game::entities_angle) * elapsedTime.asSeconds() * EnemiesSpeed);
-    entity->sprite.move(sf::Vector2f(circleSize * cos(Game::entities_angle), circleSize * sin(Game::entities_angle)));
+    float x_pos = entity->sprite.getPosition().x;
+    float y_pos = entity->sprite.getPosition().y;
+    entity->sprite.move(sf::Vector2f((circleSize * cos(Game::entities_angle * (PI / 180))),(circleSize * sin(Game::entities_angle * (PI / 180)))));
 }
 
 void Game::zigzagMovement(std::shared_ptr<Entity> entity, sf::Time elapsedTime, int movementSize)
@@ -405,10 +425,19 @@ void Game::HandleCollisionPlayerLaserEnnemy()
 
         if (ennemyBound.intersects(boundLaser) == true)
         {
-            EntityManager::deleteEntity(entity);
-            //EntityManager::deleteEntity(laser);
-            pScore++;
-            break;
+            entity->health--;
+            if (entity->health == 0) {
+                if (entity->type == EntityType::EnnemyBoss) {
+                    Spawner::CircleStrategy(EntityType::EnnemyGamma, 8, sf::Vector2f(entity->sprite.getPosition().x, entity->sprite.getPosition().y));
+                }
+                EntityManager::deleteEntity(entity);
+                pScore++;
+                break;
+            }
+            else {
+                EntityManager::deleteEntity(laser);
+                break;
+            }
         }
 
         if (superLaserDown != nullptr && superLaserDown->enabled == true) {
@@ -416,10 +445,19 @@ void Game::HandleCollisionPlayerLaserEnnemy()
             sf::FloatRect boundSuperLaserDown = superLaserDown->sprite.getGlobalBounds();
             if (ennemyBound.intersects(boundSuperLaserDown) == true)
             {
-                EntityManager::deleteEntity(entity);
-                //EntityManager::deleteEntity(boundSuperLaserDown);
-                pScore++;
-                break;
+                entity->health--;
+                if (entity->health == 0) {
+                    if (entity->type == EntityType::EnnemyBoss) {
+                        Spawner::CircleStrategy(EntityType::EnnemyGamma, 8, sf::Vector2f(entity->sprite.getPosition().x, entity->sprite.getPosition().y));
+                    }
+                    EntityManager::deleteEntity(entity);
+                    pScore++;
+                    break;
+                }
+                else {
+                    EntityManager::deleteEntity(superLaserDown);
+                    break;
+                }
             }
         }
 
@@ -428,10 +466,19 @@ void Game::HandleCollisionPlayerLaserEnnemy()
             sf::FloatRect boundSuperLaserUp = superLaserUp->sprite.getGlobalBounds();
             if (ennemyBound.intersects(boundSuperLaserUp) == true)
             {
-                EntityManager::deleteEntity(entity);
-                //EntityManager::deleteEntity(boundSuperLaserDown);
-                pScore++;
-                break;
+                entity->health--;
+                if (entity->health == 0) {
+                    if (entity->type == EntityType::EnnemyBoss) {
+                        Spawner::CircleStrategy(EntityType::EnnemyGamma, 8, sf::Vector2f(entity->sprite.getPosition().x, entity->sprite.getPosition().y));
+                    }
+                    EntityManager::deleteEntity(entity);
+                    pScore++;
+                    break;
+                }
+                else {
+                    EntityManager::deleteEntity(superLaserUp);
+                    break;
+                }
             }
         }
     }

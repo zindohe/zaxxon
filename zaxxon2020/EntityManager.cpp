@@ -51,7 +51,8 @@ bool EntityManager::isEnnemy(std::shared_ptr<Entity> entity)
 {
 	if (entity->type == EntityType::EnnemyAlphaHorizontalLeft ||
 		entity->type == EntityType::EnnemyBetaHorizontalLeft ||
-		entity->type == EntityType::EnnemyBoss) {
+		entity->type == EntityType::EnnemyBoss ||
+		entity->type == EntityType::EnnemyGamma) {
 		return true;
 	}
 	return false;

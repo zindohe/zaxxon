@@ -28,5 +28,27 @@ void Spawner::DefaultStrategy(EntityType type, sf::Vector2f first_positions)
 
 }
 
+void Spawner::CircleStrategy(EntityType type, int number, sf::Vector2f first_positions)
+{
+    shared_ptr<Entity> entity;
+
+    float angle = 0.f;
+    float angle_between = 360.f / number;
+    float radius = 80.f;
+
+    cout << "angle : " << angle << endl;
+    cout << "angle_between : " << angle_between << endl;
+
+
+    for (int i = 1; i <= number; i++)
+    {
+        /*cout << angle << " position en x : " << cos(angle * (M_PI / 180)) << endl;
+        cout << angle << " position en y : " << sin(angle * (M_PI /180)) << endl;*/
+        entity = EntityFactory::createEntity(type, sf::Vector2f(first_positions.x + (radius * cos(angle * (PI / 180))), first_positions.y + (radius * sin(angle * (PI / 180)))), true);
+        EntityManager::entities.push_back(entity);
+        angle += angle_between;
+    }
+}
+
 
 

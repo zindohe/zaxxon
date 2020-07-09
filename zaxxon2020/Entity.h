@@ -23,6 +23,7 @@ enum EntityType
 	EnnemyBetaHorizontalLeft,
 	EnnemyBoss,
 	Delimiter,
+	EnnemyGamma,
 
 	BlueBonus,
 	GreenBonus,
@@ -54,5 +55,6 @@ class Entity
 		EntityType type;
 		bool enabled; //	True on affiche, False on ne l'affiche pas
 		int framePosition;
+		int health;
 };
 
