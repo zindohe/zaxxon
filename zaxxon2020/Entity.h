@@ -27,6 +27,7 @@ enum EntityType
 	BlueBonus,
 	GreenBonus,
 	YellowBonus,
+	GreenVisualEffect,
 
 	None
 };

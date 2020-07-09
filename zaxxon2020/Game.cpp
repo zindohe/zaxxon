@@ -78,7 +78,13 @@ void Game::initSprite() {
     playerScoreText.setPosition(85.f, 750.f);
     playerScoreText.setCharacterSize(20);
     playerScoreText.setString(std::to_string(pScore));
-   
+
+    // Bonuses Visuals Effects
+
+    shared_ptr<Entity> greenVisual = EntityFactory::createEntity(EntityType::GreenVisualEffect, sf::Vector2f(player->position.x+10.f, player->position.y-5.f), true);
+    greenVisual->enabled = false;
+
+    EntityManager::entities.push_back(greenVisual);
 
 }
 
@@ -324,6 +330,7 @@ void Game::updateHandleManagement(sf::Time elapsedTime)
         HandleEnnemyLasersMovement();
         HandleCollisionEnnemyLaserPlayer();
         HandleCollisionPlayerBonus();
+        HandleBonusVisualsEffects();
     }
 }
 
@@ -651,6 +658,21 @@ void Game::HandleCollisionPlayerBonus()
             }
             break;
         }
+    }
+}
+
+void Game::HandleBonusVisualsEffects()
+{
+    shared_ptr<Entity> greenVisual = EntityManager::GetEntityByType(EntityType::GreenVisualEffect);
+    shared_ptr<Entity> player = EntityManager::GetPlayer();
+
+    if (pLives > 3)
+    {
+        greenVisual->enabled = true;
+        greenVisual->sprite.setPosition(player->sprite.getPosition().x, player->sprite.getPosition().y - 25.f);
+    }
+    else {
+        greenVisual->enabled = false;
     }
 }
 
