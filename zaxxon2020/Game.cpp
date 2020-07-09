@@ -97,6 +97,7 @@ void Game::initSprite() {
 void Game::initSounds()
 {
     mainMusic.play();
+    mainMusic.setVolume(50.f);
 }
 
 
@@ -428,6 +429,7 @@ void Game::HandleCollisionPlayerLaserEnnemy()
             entity->health--;
             if (entity->health == 0) {
                 if (entity->type == EntityType::EnnemyBoss) {
+                    EntityManager::deleteEntity(laser);
                     Spawner::CircleStrategy(EntityType::EnnemyGamma, 8, sf::Vector2f(entity->sprite.getPosition().x, entity->sprite.getPosition().y));
                 }
                 EntityManager::deleteEntity(entity);
@@ -448,6 +450,7 @@ void Game::HandleCollisionPlayerLaserEnnemy()
                 entity->health--;
                 if (entity->health == 0) {
                     if (entity->type == EntityType::EnnemyBoss) {
+                        EntityManager::deleteEntity(superLaserDown);
                         Spawner::CircleStrategy(EntityType::EnnemyGamma, 8, sf::Vector2f(entity->sprite.getPosition().x, entity->sprite.getPosition().y));
                     }
                     EntityManager::deleteEntity(entity);
@@ -469,6 +472,7 @@ void Game::HandleCollisionPlayerLaserEnnemy()
                 entity->health--;
                 if (entity->health == 0) {
                     if (entity->type == EntityType::EnnemyBoss) {
+                        EntityManager::deleteEntity(superLaserUp);
                         Spawner::CircleStrategy(EntityType::EnnemyGamma, 8, sf::Vector2f(entity->sprite.getPosition().x, entity->sprite.getPosition().y));
                     }
                     EntityManager::deleteEntity(entity);

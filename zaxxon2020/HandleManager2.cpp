@@ -58,7 +58,7 @@ void HandleManager::HandlePlayerLaserMove(const float windowWidthSize)
 void HandleManager::HandleBackgroundMovement(shared_ptr<Entity> background, const sf::Vector2u mainWindowSize)
 {
     sf::Vector2f positions = background->sprite.getPosition();
-    positions.x -= 1;
+    positions.x -= 2;
     background->sprite.setPosition(positions);
 
    if (positions.x + background->size.x < 0)
