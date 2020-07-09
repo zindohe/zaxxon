@@ -36,9 +36,6 @@ void Spawner::CircleStrategy(EntityType type, int number, sf::Vector2f first_pos
     float angle_between = 360.f / number;
     float radius = 80.f;
 
-    cout << "angle : " << angle << endl;
-    cout << "angle_between : " << angle_between << endl;
-
 
     for (int i = 1; i <= number; i++)
     {

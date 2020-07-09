@@ -163,7 +163,8 @@ void HandleManager::EnnemiesStage1(const sf::Vector2u mainWindowSize)
     
     //Ennemies Alpha
     
-    Spawner::LinearStrategy(mainWindowSize, EntityType::EnnemyAlphaHorizontalLeft, 4, sf::Vector2f(700.f, 0.f));
+    //Spawner::LinearStrategy(mainWindowSize, EntityType::EnnemyAlphaHorizontalLeft, 4, sf::Vector2f(300.f, 0.f));
+    Spawner::CircleStrategy(EntityType::EnnemyGamma, 8, sf::Vector2f(700.f, 300.f));
 
 }
 

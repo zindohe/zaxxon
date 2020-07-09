@@ -97,6 +97,7 @@ void Game::initSprite() {
 void Game::initSounds()
 {
     mainMusic.play();
+    mainMusic.setVolume(50.f);
 }
 
 
@@ -225,6 +226,7 @@ void Game::update(sf::Time elapsedTime)
         else if (entity->type == EntityType::EnnemyAlphaHorizontalLeft)
         {
             handleEnemiesMovement(entity, elapsedTime, MovementType::HorizontalBackAndForth, 450);
+            //handleEnemiesMovement(entity, elapsedTime, MovementType::Circle, 80.f);
         }
         else if (entity->type == EntityType::EnnemyBetaHorizontalLeft)
         {
@@ -235,15 +237,12 @@ void Game::update(sf::Time elapsedTime)
             handleEnemiesMovement(entity, elapsedTime, MovementType::HorizontalBackAndForth, 50);
         }
         else if (entity->type == EntityType::EnnemyGamma) {
-            handleEnemiesMovement(entity, elapsedTime, MovementType::Circle, 10.f);
+            handleEnemiesMovement(entity, elapsedTime, MovementType::Circle, 80.f);
         }
 
     }
 
-    //Game::entities_angle += (5.f * (M_PI/180));
-    if (Game::entities_angle > 360.f)
-        Game::entities_angle = 0.f;
-    Game::entities_angle += 5.f;
+    //Game::entities_angle += 180.f;
     // handle player actions consequences there
     handlePlayerMove();
 
@@ -313,7 +312,19 @@ void Game::circleMovement(std::shared_ptr<Entity> entity, sf::Time elapsedTime, 
     // entity->sprite.move(cos(Game::entities_angle) * elapsedTime.asSeconds() * EnemiesSpeed, sin(Game::entities_angle) * elapsedTime.asSeconds() * EnemiesSpeed);
     float x_pos = entity->sprite.getPosition().x;
     float y_pos = entity->sprite.getPosition().y;
-    entity->sprite.move(sf::Vector2f((circleSize * cos(Game::entities_angle * (PI / 180))),(circleSize * sin(Game::entities_angle * (PI / 180)))));
+
+    if (stoi(std::to_string(elapsedTime.asSeconds())) % 25 == 0) {
+        if (Game::entities_angle > 360.f)
+            Game::entities_angle = 0.f;
+        //Game::entities_angle += (360.f/8.f);
+        Game::entities_angle += 10.f;
+
+
+        entity->sprite.setPosition(sf::Vector2f(
+            700.f + (circleSize * cos(Game::entities_angle * (PI / 180))),
+            300.f + (circleSize * sin(Game::entities_angle * (PI / 180)))
+        ));
+    }
 }
 
 void Game::zigzagMovement(std::shared_ptr<Entity> entity, sf::Time elapsedTime, int movementSize)
