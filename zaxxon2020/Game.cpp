@@ -490,7 +490,7 @@ void Game::HandleCollisionPlayerLaserEnnemy()
 
 void Game::HandleGameOver()
 {
-    if (pLives == 0)
+    if (pLives <= 0)
     {
         GameOver();
     }
@@ -498,7 +498,7 @@ void Game::HandleGameOver()
 
 void Game::GameOver()
 {
-    if (pLives == 0)
+    if (pLives <= 0)
     {
         gameOverText.setFillColor(sf::Color::Red);
         gameOverText.setFont(sansationFont);
