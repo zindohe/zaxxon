@@ -23,6 +23,7 @@ enum EntityType
 	EnnemyBetaHorizontalLeft,
 	EnnemyBoss,
 	Delimiter,
+	EnnemyGamma,
 
 	BlueBonus,
 	GreenBonus,
