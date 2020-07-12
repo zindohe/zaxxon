@@ -48,7 +48,7 @@ class Game
 
 		sf::Music mainMusic;
 		static const float		PlayerSpeed;
-		static const sf::Time	TimePerFrame;
+		static sf::Time	TimePerFrame;
 		std::size_t	mStatisticsNumFrames;
 		bool isUpPressed = false;
 		bool isDownPressed = false;
@@ -73,5 +73,6 @@ class Game
 		int pLives = 3;
 		sf::Text playerScoreText;
 		int pScore = 0;
+		float fps = 60.f;
 };
 

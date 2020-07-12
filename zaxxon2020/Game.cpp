@@ -9,7 +9,7 @@
 #include "Spawner.h"
 
 const float Game::PlayerSpeed = 10.f;
-const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
+sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 const float Game::EnemiesSpeed = 100.f;
 
 Game::Game() : mainWindow(sf::VideoMode(1200, 800), "ZAXXON 2020 HD", sf::Style::Close),
@@ -111,7 +111,7 @@ void Game::run() {
         sf::Time elapsedTime = clock.restart();
 
         timeSinceLastUpdate += elapsedTime;
-        while (timeSinceLastUpdate > TimePerFrame)
+        while (timeSinceLastUpdate.asSeconds() > TimePerFrame.asSeconds())
         {
             timeSinceLastUpdate -= TimePerFrame;
 
@@ -173,6 +173,15 @@ void Game::handlePlayerActions(sf::Keyboard::Key key, bool isPressed)
     if (key == sf::Keyboard::R) {
         ResetGame();
     }
+
+    if (key == sf::Keyboard::Add) {
+        fps++;
+    }
+
+    if (key == sf::Keyboard::Subtract) {
+        fps--;
+    }
+
 
     // CHEAT CODES
 
@@ -329,11 +338,13 @@ void Game::zigzagMovement(std::shared_ptr<Entity> entity, sf::Time elapsedTime, 
 
 void Game::updateHandleManagement(sf::Time elapsedTime)
 {
+    Game::TimePerFrame = sf::seconds(1.f / fps);
     mStatisticsNumFrames += 1;
     updateTime += elapsedTime;
     if (updateTime >= sf::seconds(1.0f))
     {
-        fpsText.setString(std::to_string(mStatisticsNumFrames) + " FPS");
+        float value = (int)(fps * 100 + 0.5);
+        fpsText.setString(std::to_string((int)value/100) + " FPS");
     }
     mStatisticsNumFrames = 0;
     HandleManager::HandlePlayerLaserMove(this->mainWindow.getSize().x);

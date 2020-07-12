@@ -63,10 +63,8 @@ void HandleManager::HandleBackgroundMovement(shared_ptr<Entity> background, cons
 
    if (positions.x + background->size.x < 0)
     {
-        cout << "Size Before: " << EntityManager::entities.size() << endl;
         ChangeToNextStage();
         SpawnEnnemies(mainWindowSize);
-        cout << "Size After : " << EntityManager::entities.size() << endl << endl;
     } 
   
 }
@@ -292,8 +290,6 @@ void HandleManager::EnnemiesStage8(const sf::Vector2u mainWindowSize)
 
 void HandleManager::EnnemiesStage9(const sf::Vector2u mainWindowSize)
 {
-
-    cout << "EnnemiesStage3" << endl;
 
     EntityManager::DeleteAllEnnemies();
 
