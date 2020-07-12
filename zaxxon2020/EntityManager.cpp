@@ -123,6 +123,11 @@ shared_ptr<Entity> EntityManager::GetPlayerSuperLaserUp()
 
 void EntityManager::deleteEntity(shared_ptr<Entity> entity)
 {
+	if (entity->type == EntityType::PlayerLaser ||
+		entity->type == EntityType::PlayerSuperLaserDown ||
+		entity->type == EntityType::PlayerSuperLaserUp) {
+		Action::isPlayerFiring = false;
+	}
 
 	if (isEnnemy(entity)) {
 		int r = rand() % 100 + 1;

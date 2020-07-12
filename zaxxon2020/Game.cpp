@@ -449,7 +449,6 @@ void Game::HandleCollisionPlayerLaserEnnemy()
             }
             else {
                 EntityManager::deleteEntity(laser);
-                Action::isPlayerFiring = false;
                 break;
             }
         }
@@ -471,7 +470,6 @@ void Game::HandleCollisionPlayerLaserEnnemy()
                 }
                 else {
                     EntityManager::deleteEntity(superLaserDown);
-                    Action::isPlayerFiring = false;
                     break;
                 }
             }
@@ -494,7 +492,6 @@ void Game::HandleCollisionPlayerLaserEnnemy()
                 }
                 else {
                     EntityManager::deleteEntity(superLaserUp);
-                    Action::isPlayerFiring = false;
                     break;
                 }
             }
