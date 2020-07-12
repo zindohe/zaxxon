@@ -202,10 +202,10 @@ void Game::handlePlayerActions(sf::Keyboard::Key key, bool isPressed)
         isRightPressed = isPressed;
     else if (key == sf::Keyboard::Space)
     {
-        if ( !isPressed ) {
+        if ( !isPressed) {
             isSpacePressed = false;
         }
-        else  if (isPressed && isSpacePressed == false && gameOver == false){
+        else  if (isPressed && isSpacePressed == false && gameOver == false && !Action::isPlayerFiring){
             isSpacePressed = true;
             Action::PlayerFireLaser();
         }

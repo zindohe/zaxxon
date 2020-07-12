@@ -6,6 +6,7 @@
 
 float Action::PlayerSpeed = 10.f;
 bool Action::isSuperLaserActive = false;
+bool Action::isPlayerFiring = false;
 
 void Action::PlayerFireLaser() {
 	shared_ptr<Entity> player = EntityManager::GetPlayer();
@@ -29,6 +30,7 @@ void Action::PlayerFireLaser() {
 	
 
 	EntityManager::entities.push_back(playerLaser);
+	isPlayerFiring = true;
 }
 
 

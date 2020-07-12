@@ -4,6 +4,7 @@
 #include "EntityManager.h"
 #include "EntityFactory.h"
 #include "Spawner.h"
+#include "Action2.h"
 
 void HandleManager::HandlePlayerLaserMove(const float windowWidthSize)
 {
@@ -46,6 +47,7 @@ void HandleManager::HandlePlayerLaserMove(const float windowWidthSize)
             (*iterator)->enabled = false;
             iterator--;
             EntityManager::entities.erase(iterator + 1);
+            Action::isPlayerFiring = false;
             continue;
         }
 
